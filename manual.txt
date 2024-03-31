@@ -1,0 +1,20 @@
+Manual, press <I> to quit
+_________________________
+key functions:
+Shift map: Arrow keys
+Rotate:
+R / L : X-Axis
+G / H : Z-Axis
+J / N : Y-Axis
+ZOOM: P / M
+Change Z Value: Z / A
+Debug Mode : D
+Reset Map : R
+--------------------------
+Mouse functions:
+Scrool Wheel:
+Zoom at mouse pointer
+Left Button:
+Shift Map
+Right Button:
+Rotate Map

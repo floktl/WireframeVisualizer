@@ -35,7 +35,7 @@
 ## :star2: About the Project
 
 <div align="center"> 
-  <img src="![image](https://github.com/floktl/WireframeVisualizer/assets/147641602/e2fc293a-a417-4f95-91b2-a0aebaa5ac61)" alt="screenshot" />
+  <img src="https://github.com/floktl/WireframeVisualizer/assets/147641602/e2fc293a-a417-4f95-91b2-a0aebaa5ac61" alt="screenshot" />
 </div>
 
 

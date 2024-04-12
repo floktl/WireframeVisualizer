@@ -5,7 +5,7 @@
   <h1>Wireframe Visualizer- a 42 Project</h1>
   
   <p>
-    An Porgram to display wireframe maps! 
+    A Porgram to display wireframe maps! 
   </p>
 
 <br />
@@ -36,6 +36,11 @@
 
 <div align="center"> 
   <img src="https://github.com/floktl/WireframeVisualizer/assets/147641602/e2fc293a-a417-4f95-91b2-a0aebaa5ac61" alt="screenshot" width="350" height="350"
+
+  <p>
+    Here is an example map, a costal landscape
+  </p>
+  
 </div> 
 
 
@@ -70,13 +75,6 @@ running the executable with a map (choose map from test_map directory)
 Use this space to tell a little more about your project and how it can be used. Show additional screenshots, code samples, demos or link to other resources.
 
 
-```javascript
-import Component from 'my-project'
-
-function App() {
-  return <Component />
-}
-```
 
 <!-- Roadmap -->
 ## :compass: Roadmap
@@ -89,9 +87,9 @@ function App() {
 <!-- Contact -->
 ## :handshake: Contact
 
-Florian Keitel - [[@twitter_handle](https://twitter.com/twitter_handle)](https://www.linkedin.com/in/fkeitel/) - fl.keitel@gmail.com
+Florian Keitel - [[@twitter_handle](#https://twitter.com/twitter_handle)](https://www.linkedin.com/in/fkeitel/) - fl.keitel@gmail.com
 
-Project Link: [https://github.com/floktl/WireframeVisualizer)](https://github.com/floktl/WireframeVisualizer)]
+Project Link: [https://github.com/floktl/WireframeVisualizer)](#https://github.com/floktl/WireframeVisualizer)]
 
 <!-- Acknowledgments -->
 ## :gem: Acknowledgements

@@ -36,8 +36,7 @@
 
 <div align="center"> 
   <img src="https://github.com/floktl/WireframeVisualizer/assets/147641602/e2fc293a-a417-4f95-91b2-a0aebaa5ac61" alt="screenshot" width="350" height="350"
-</div> />
-</div>
+</div> 
 
 
 

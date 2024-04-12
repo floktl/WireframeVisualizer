@@ -35,42 +35,16 @@
 ## :star2: About the Project
 
 <div align="center"> 
-  <img src="https://github.com/floktl/WireframeVisualizer/assets/147641602/e2fc293a-a417-4f95-91b2-a0aebaa5ac61" alt="screenshot" width="200" height="200" />
+  <img src="https://github.com/floktl/WireframeVisualizer/assets/147641602/e2fc293a-a417-4f95-91b2-a0aebaa5ac61" alt="screenshot" width="350" height="350"
 </div> />
 </div>
 
 
 
-<!-- TechStack -->
-### :space_invader: Tech Stack
-
-<!-- Features -->
-### :dart: Features
-
-- Feature 1
-- Feature 2
-- Feature 3
-
-
-<!-- Env Variables -->
-### :key: Environment Variables
-
-To run this project, you will need to add the following environment variables to your .env file
-
-`API_KEY`
-
-`ANOTHER_API_KEY`
-
-<!-- Getting Started -->
-## 	:toolbox: Getting Started
-
-```bash
- npm install --global yarn
-```
 
 
 <!-- Run Locally -->
-### :running: Run Locally
+### :running: Getting Started
 
 Clone the project
 

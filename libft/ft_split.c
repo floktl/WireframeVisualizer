@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:08:31 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/22 08:10:35 by flo              ###   ########.fr       */
+/*   Updated: 2024/03/26 13:12:45 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ static void	ft_free(char **split, size_t words)
 	}
 	free(split);
 }
+
 static size_t	get_words(char const *s, char c)
 {
 	size_t	i;
 	size_t	count;
+
 	i = 0;
 	count = 0;
 	while (s[i])
@@ -41,11 +43,13 @@ static size_t	get_words(char const *s, char c)
 	}
 	return (count);
 }
+
 static void	ft_progress(char const *s, char c, char **split, size_t words)
 {
 	size_t	word_len;
 	size_t	i;
 	int		count;
+
 	count = 0;
 	i = 0;
 	while (s[count] && i < words)
@@ -66,10 +70,12 @@ static void	ft_progress(char const *s, char c, char **split, size_t words)
 	}
 	split[i] = NULL;
 }
+
 char	**ft_split(char const *s, char c)
 {
 	char	**split;
 	size_t	words;
+
 	if (!s)
 		return (NULL);
 	words = get_words(s, c);
@@ -79,6 +85,7 @@ char	**ft_split(char const *s, char c)
 	ft_progress(s, c, split, words);
 	return (split);
 }
+
 //#include <stdio.h>
 //int main()
 //{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reading_map.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 09:16:53 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/25 10:45:11 by flo              ###   ########.fr       */
+/*   Updated: 2024/03/26 13:12:14 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 // function to assign the map data to the array and allocate new memory
 int32_t	***assign(int32_t ***map, char **collumn, int collumn_counter, int *row)
 {
+	static int	col = 1;
+
 	map[*row] = malloc(sizeof(int32_t *) * (collumn_counter + 1));
 	if (!map[*row])
 		return (free_map_data(map, collumn, *row));
@@ -27,10 +29,11 @@ int32_t	***assign(int32_t ***map, char **collumn, int collumn_counter, int *row)
 	{
 		free(map[*row]);
 		map[*row] = NULL;
-		ft_printf("at line %d col %d\n", *row + 1, collumn_counter);
+		ft_printf("at line %d col %d\n", *row + 1, col);
 		return (free_map_data(map, collumn, *row));
 	}
 	(*row)++;
+	col++;
 	return (map);
 }
 

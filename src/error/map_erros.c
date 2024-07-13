@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_erros.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/09 15:54:00 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/25 10:18:40 by flo              ###   ########.fr       */
+/*   Updated: 2024/03/26 12:56:52 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,17 @@
 //------------------- functions to hadle map error cases -----------------------
 //
 
-//	this function checks, if the point on the map is an integer and if
-//	the color code is in the range of the hexadezimal color code
+//	this function checks, if the point on the map is an integer
 int	check_map_integer(int32_t ***map_collumn, char **collumn, int x, int line)
 {
 	int		i;
 
 	i = 0;
+	if (collumn[x][0] == '+' || collumn[x][0] == '-')
+		i++;
 	while (collumn[x][i] && collumn[x][i] != ',')
 	{
-		if (ft_isdigit(collumn[x][i] - '0') == 1)
+		if (collumn[x][i] < '0' || collumn[x][i] > '9')
 		{
 			x = 0;
 			while ((*map_collumn)[x])
@@ -74,11 +75,15 @@ int	check_colorcode(char *hex_str, char *digit)
 		ft_printf("color code should start with 0x ");
 		return (EXIT_FAILURE);
 	}
-	if (hex_str[3] && hex_str[4] && !hex_str[9])
+	if (hex_str[3] && hex_str[4] && ft_strlen(hex_str) <= 9)
 		*digit = hex_str[3];
 	else
 	{
 		ft_printf("color code unvalid ");
+		if (ft_strlen(hex_str) > 9)
+			ft_printf("->too long ");
+		else if (!hex_str[3] || !!hex_str[4])
+			ft_printf("->too short ");
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

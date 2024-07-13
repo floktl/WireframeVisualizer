@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_initiate.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 20:53:16 by flo               #+#    #+#             */
-/*   Updated: 2024/03/25 16:30:41 by flo              ###   ########.fr       */
+/*   Updated: 2024/03/26 15:32:47 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	create_manual(t_window *window)
 		perror("manual damaged");
 		return (0);
 	}
+	window->manual = NULL;
 	while (manual_line)
 	{
 		new_node = malloc(sizeof(t_man));
@@ -64,5 +65,7 @@ int	initialize_mlx_image(t_window *window)
 	mlx_set_window_limit(window->mlx, 300, 300, max_size_x, max_size_y);
 	ft_printf("\033[0;34m\nProgramm ready, press I for manual!\033[0m\n");
 	window->man = mlx_put_string(window->mlx, "Press <I> for manual", 8, 8);
+	if (!window->man)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

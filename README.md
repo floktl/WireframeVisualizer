@@ -1,7 +1,4 @@
 
-
-<div align="center">
-
   <h1>Wireframe Visualizer- a 42 Project</h1>
 
   <p>
@@ -49,7 +46,7 @@ It highlights efficient coding practices and custom solutions, providing a solid
 
 You can zoom the map with the scroll wheel Or shift the map with left mouse button clicked
 
-Press <I> for the full manual
+Press I for the full manual
 
 <img src="https://github.com/floktl/42-Projects/assets/147641602/e01b80c4-be14-4106-9a60-dd5dad0712da" alt="fdf_mapzoom" width="300">
 

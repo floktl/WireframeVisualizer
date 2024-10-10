@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+         #
+#    By: flo <flo@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/12 14:13:59 by fkeitel           #+#    #+#              #
-#    Updated: 2024/03/26 14:23:03 by fkeitel          ###   ########.fr        #
+#    Updated: 2024/10/10 15:49:37 by flo              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CFLAGS  := -Wunreachable-code -Ofast -Wall -Werror -Wextra -g
 MLX_FLAGS := -L./MLX42/build -lmlx42 -I../MLX42/include -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
 # Flag for memory leak detection, adjust the path to your own path
-#LEAKFLAG := -L/Users/fkeitel/Documents/LeakSanitizer  -llsan
+#LEAKFLAG := -L/Users/flo/LeakSanitizer  -llsan
 
 # Directories
 SRC_DIR := src

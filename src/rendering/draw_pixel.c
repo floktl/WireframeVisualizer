@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   draw_pixel.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 18:39:28 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/24 14:37:54 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/14 17:09:55 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../fdf.h"
+#include "fdf.h"
 
 //
 //------this function are for th eactually rendering the pixels the window-----

@@ -6,11 +6,11 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 17:02:49 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/18 18:45:36 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/14 17:10:21 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../fdf.h"
+#include "fdf.h"
 
 //
 //-------------- functions to calculate the changes when zooming --------------

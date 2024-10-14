@@ -6,11 +6,11 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 07:33:54 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/25 16:22:36 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/14 17:17:04 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../fdf.h"
+#include "fdf.h"
 
 //	this function resets the map settings to the default settings
 int	reset_map(t_window *window)

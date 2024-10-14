@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   rotate_functions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:32:30 by flo               #+#    #+#             */
-/*   Updated: 2024/03/24 15:31:30 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/14 17:10:11 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../fdf.h"
+#include "fdf.h"
 
 //
 //-------------- functions to calculate the changes when rotating -------------

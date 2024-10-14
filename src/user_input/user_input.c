@@ -6,11 +6,11 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:11:17 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/18 18:57:53 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/14 17:12:07 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../fdf.h"
+#include "fdf.h"
 
 //
 //	functions, that will handle all keypads and mouse inputs from the user

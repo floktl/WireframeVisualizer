@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   user_input_helpers.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 16:21:26 by flo               #+#    #+#             */
-/*   Updated: 2024/03/26 15:31:17 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/14 17:12:03 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../fdf.h"
+#include "fdf.h"
 
 //	function to remove the manual from the window and replace it
 void	remove_manual_from_window(t_window *window)

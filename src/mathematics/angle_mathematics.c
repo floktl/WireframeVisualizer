@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   angle_mathematics.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 11:36:46 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/19 13:35:37 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/14 17:10:55 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../fdf.h"
+#include "fdf.h"
 
 //
 //----------- replacement for the angle fucntion (sin(), cos()) ---------------

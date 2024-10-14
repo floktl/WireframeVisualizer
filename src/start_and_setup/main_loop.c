@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   main_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 09:45:33 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/24 14:14:55 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/14 17:11:34 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../fdf.h"
+#include "fdf.h"
 
 //
 //-------------- main loop for the programm, it runs constantly----------------
 //
 
-//fills the window with the map rendered in 3d functionality
-void	ft_render(void *param)
+// fills the window with the map rendered in 3D functionality
+void ft_render(void *param)
 {
-	t_window	*window;
-	t_coord		*current;
-	int			x_offset;
-	int			y_offset;
+	t_window *window;
+	t_coord *current;
+	int x_offset;
+	int y_offset;
 
 	x_offset = 0;
 	y_offset = 0;
@@ -72,3 +72,21 @@ int	ft_hook_key(t_window *window, int *x_offset, int *y_offset)
 		return (NO_CHANGE);
 	return (CHANGE);
 }
+
+// sending notification via pushover app
+// static int push_block = 0;
+// static int previous_rot = 0;
+// if (previous_rot != window->map_sz.xm_rot_deg
+// 	&& mlx_is_key_down(window->mlx, MLX_KEY_E))
+// 	push_block = 0;
+// if (mlx_is_key_down(window->mlx, MLX_KEY_Q) && push_block == 0
+// 	&& previous_rot != window->map_sz.xm_rot_deg)
+// {
+// 	push_block = 1;
+// 	previous_rot = window->map_sz.xm_rot_deg;
+// 	char command[256];
+// 	snprintf(command, sizeof(command),
+// 		"python3 push.py \"rotation degree: %d\"",
+// 			window->map_sz.xm_rot_deg);
+// 	system(command);
+// }

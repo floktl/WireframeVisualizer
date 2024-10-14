@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   update_values.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 08:24:45 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/20 11:12:05 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/14 17:11:18 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../fdf.h"
-#include <math.h>
+#include "fdf.h"
 
 //
 //------- this functions update the map values after changing parameters -------
@@ -43,6 +42,7 @@ int32_t	update_coord(t_window *window, int x_offset, int y_offset)
 	}
 	window->map_sz.height_change = HEIGHT_DEFAULT;
 	window->zoom = ZOOM_DEFAULT;
+	pipe_data(window);
 	return (EXIT_SUCCESS);
 }
 

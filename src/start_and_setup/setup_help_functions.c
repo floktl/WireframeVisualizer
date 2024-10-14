@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   setup_help_functions.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:36:30 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/24 10:18:11 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/14 17:11:46 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../fdf.h"
+#include "fdf.h"
 
 //
 //---------------- additional functions while initialize the map ---------------

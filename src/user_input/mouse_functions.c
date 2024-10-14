@@ -6,11 +6,11 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/09 14:58:34 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/18 18:49:44 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/14 17:12:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../fdf.h"
+#include "fdf.h"
 
 //
 //------ these fucntions handles the calclualtion for mouse user input --------

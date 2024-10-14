@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_initiate.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 20:53:16 by flo               #+#    #+#             */
-/*   Updated: 2024/03/26 15:32:47 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/14 17:11:38 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../fdf.h"
+#include "fdf.h"
 
 //	reading the lines from the manual and assigning them in a list of images
 int	create_manual(t_window *window)

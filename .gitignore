@@ -50,3 +50,26 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+dist/
+build/
+
+# Temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+

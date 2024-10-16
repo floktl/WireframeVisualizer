@@ -96,6 +96,7 @@ try:
 		plt.pause(0.01)
 except KeyboardInterrupt:
 	print("Exiting due to keyboard interrupt.")
+	plt.close()
 
 #pipe1_buffer = b''  # for rotation degrees
 #pipe2_buffer = b''  # for x and y coordinates

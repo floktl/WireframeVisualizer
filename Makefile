@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: flo <flo@student.42.fr>                    +#+  +:+       +#+         #
+#    By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/12 14:13:59 by fkeitel           #+#    #+#              #
-#    Updated: 2024/10/16 07:52:55 by flo              ###   ########.fr        #
+#    Updated: 2024/10/16 10:53:18 by fkeitel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,8 +47,8 @@ all: $(OBJ_DIR) $(NAME)
 mlx:
 	@if [ ! -d "MLX42" ]; then \
 		git clone https://github.com/codam-coding-college/MLX42.git MLX42; \
-		cd MLX42 && cmake -B build && cmake --build build -j4; \
 	fi
+	@cd MLX42 && git fetch && git checkout f87c401e495dcf56e9162a2241d7761238bb189f && cmake -B build && cmake --build build -j4 \
 
 # Rule to build the project using MLX library
 $(NAME): mlx $(OBJS) $(LIBFTTARGET)
@@ -71,6 +71,7 @@ $(OBJ_DIR):
 clean:
 	@$(MAKE) -C $(LIBFT) fclean
 	@rm -rf $(OBJ_DIR)
+	@rm -rf MLX42/build
 
 # Rule to clean project and object files
 fclean: clean

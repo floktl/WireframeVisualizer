@@ -6,7 +6,7 @@
 #    By: flo <flo@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/12 14:13:59 by fkeitel           #+#    #+#              #
-#    Updated: 2024/10/16 06:31:45 by flo              ###   ########.fr        #
+#    Updated: 2024/10/16 07:52:55 by flo              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ NAME    := fdf
 
 # Compiler and Flags
 CC      := gcc
-CFLAGS  := -Wunreachable-code -Ofast -Wall -Werror -Wextra -g
+CFLAGS  := -Wunreachable-code -Ofast -Wall -Werror -Wextra -g -fsanitize=address
 MLX_FLAGS := -L./MLX42/build -lmlx42 -I../MLX42/include -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
 # Flag for memory leak detection, adjust the path to your own path

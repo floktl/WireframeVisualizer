@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 09:45:33 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 06:16:16 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/16 08:08:42 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,34 +20,34 @@
 void ft_render(void *param)
 {
 	(void)param;
-	//t_window *window;
-	//t_coord *current;
-	// int x_offset;
-	// int y_offset;
+	t_window *window;
+	t_coord *current;
+	int x_offset;
+	int y_offset;
 
-	// x_offset = 0;
-	// y_offset = 0;
-	// window = (t_window *)param;
-	// (void)window;
-	// mlx_get_mouse_pos(window->mlx, &window->mouse_posx, &window->mouse_posy);
-	// check_margin_border(window);
-	// clear_image(window, DEFAULT_WINDOW_COLOR);
-	// pthread_mutex_lock(&window->map_sz.data_mutex);
-	// if (ft_hook_key(window, &x_offset, &y_offset) == CHANGE)
-	// {
-	// 	update_coord(window, x_offset, y_offset);
-	// }
-	// print_debug_point_1(window);
-	// print_debug_point_2(window);
-	// pthread_mutex_unlock(&window->map_sz.data_mutex);
-	// current = window->coord;
-	// while (current != NULL && current->next != NULL)
-	// {
-	// 	if (current->pos_ym == current->next->pos_ym)
-	// 		connect_points(window, current, current->next);
-	// 	connect_points(window, current, current->next_y);
-	// 	current = current->next;
-	// }
+	x_offset = 0;
+	y_offset = 0;
+	window = (t_window *)param;
+	(void)window;
+	mlx_get_mouse_pos(window->mlx, &window->mouse_posx, &window->mouse_posy);
+	check_margin_border(window);
+	clear_image(window, DEFAULT_WINDOW_COLOR);
+	pthread_mutex_lock(&window->map_sz.data_mutex);
+	if (ft_hook_key(window, &x_offset, &y_offset) == CHANGE)
+	{
+		update_coord(window, x_offset, y_offset);
+	}
+	print_debug_point_1(window);
+	print_debug_point_2(window);
+	pthread_mutex_unlock(&window->map_sz.data_mutex);
+	current = window->coord;
+	while (current != NULL && current->next != NULL)
+	{
+		if (current->pos_ym == current->next->pos_ym)
+			connect_points(window, current, current->next);
+		connect_points(window, current, current->next_y);
+		current = current->next;
+	}
 }
 
 //	hook functions for keyboard user input:

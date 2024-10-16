@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:26:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 06:05:36 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/16 09:24:17 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,8 @@ typedef struct s_coordinates
 	struct s_coordinates	*before_y;
 }	t_coord;
 
+typedef struct s_pipe_thread_data t_pipe_thread_data;
+
 // size of the map, each point is one value
 // x = x-axis coordinate , y = y-axis z = z = z-axis
 //	m = map object, w = window, cent = center/middlepoint
@@ -181,6 +183,8 @@ typedef struct s_arr_size
 	int		map_area;
 	int		pipe_fd[4][2];
 	pthread_mutex_t	data_mutex;
+	int		running;
+	t_pipe_thread_data *thread_data;
 }	t_sz;
 
 //	struct for images for the manual, independent from the map

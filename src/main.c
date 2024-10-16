@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 13:51:31 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 09:14:28 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/16 09:27:01 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,12 @@ int pipe_data_multithreaded(t_sz *map_data)
 	return (EXIT_SUCCESS);
 }
 
-
+void	cleanup_threads(t_sz *map_data)
+{
+	pthread_mutex_lock(&map_data->data_mutex);
+	map_data->running = 0;
+	pthread_mutex_unlock(&map_data->data_mutex);
+}
 
 
 int main(int argc, char *argv[])
@@ -149,15 +154,7 @@ int main(int argc, char *argv[])
 
 	// Main loop can perform its own tasks here
 	// For example, running until an exit condition or user input
-	while (1)
-	{
-		// Here, you can check for a termination condition,
-		// such as a key press or a specific event that signals to exit.
-
-		// For demonstration purposes, we will just sleep
-		usleep(100000); // Sleep for 0.1 seconds
-	}
-
+	mlx_loop(window.mlx);
 	// Clean up threads
 	// Setting the running flag to 0 will signal threads to stop
 	cleanup_threads(&window.map_sz); // Call this function to stop threads

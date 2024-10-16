@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:39:23 by fkeitel           #+#    #+#             */
-/*   Updated: 2023/10/30 19:48:54 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/16 06:19:32 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ static void	put_char(char c, int fd)
 
 static int	num_place(unsigned int n)
 {
-	if (n < 0)
-		return (0);
 	if (n < 10)
 		return (1);
 	if (n < 100)

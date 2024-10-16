@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:28:26 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/14 17:10:48 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/16 06:19:12 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int32_t	convert_str_to_hex(char *hex_str)
 	int				i;
 
 	i = 3;
+	hex_value = 0;
 	if (check_colorcode(hex_str, &digit) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	while (hex_str[i] != '\0')

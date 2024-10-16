@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 08:24:45 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/14 17:11:18 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/15 16:22:26 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int32_t	update_coord(t_window *window, int x_offset, int y_offset)
 	}
 	window->map_sz.height_change = HEIGHT_DEFAULT;
 	window->zoom = ZOOM_DEFAULT;
-	pipe_data(window);
 	return (EXIT_SUCCESS);
 }
 

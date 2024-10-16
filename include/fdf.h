@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:26:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/14 17:16:50 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/16 06:05:36 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@
 //	height_change between 0.001 and 0.5
 # define HEIGHT_FAKTOR 0.1
  // Time in microseconds (100ms) between writes for python data window
-#define WRITE_INTERVAL 50000
+#define WRITE_INTERVAL 5000
 
 /* ------------------------------- libraries -------------------------------- */
 
@@ -105,6 +105,7 @@
 # include <stdlib.h>
 # include <stdbool.h>
 #include <sys/time.h> // for gettimeofday
+#include <pthread.h> // for multithreading to send Data continously
 
 /* -------------------------------- structs --------------------------------- */
 
@@ -178,6 +179,8 @@ typedef struct s_arr_size
 	int32_t	color_plus;
 	int32_t	color_minus;
 	int		map_area;
+	int		pipe_fd[4][2];
+	pthread_mutex_t	data_mutex;
 }	t_sz;
 
 //	struct for images for the manual, independent from the map
@@ -202,7 +205,6 @@ typedef struct s_window
 	void		*win;
 	int32_t		***map;
 	t_sz		map_sz;
-	int			pipe_fd[2];
 	t_coord		*coord;
 	int			cent_xw;
 	int			cent_yw;
@@ -218,6 +220,12 @@ typedef struct s_window
 	float		max_zoom_size;
 	float		min_zoom_size;
 }	t_window;
+
+typedef struct s_pipe_thread_data
+{
+	t_sz *map_data;
+	int pipe_index;
+} t_pipe_thread_data;
 
 /*
 --------------------------------- functions ------------------------------------
@@ -405,6 +413,5 @@ int		zoom_calc(t_window *window, t_coord *cur_point);
 
 //	pipe_data
 int		create_pipe(t_window *window);
-void	pipe_data(t_window *window);
 
 #endif

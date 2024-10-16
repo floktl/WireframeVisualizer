@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:26:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 10:02:02 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/16 11:50:02 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@
 # define DEGREE_DEFAULT_Z 320.0
 //	height_change between 0.001 and 0.5
 # define HEIGHT_FAKTOR 0.1
- // Time in microseconds (100ms) between writes for python data window
-#define WRITE_INTERVAL 50
+// Time in microseconds (100ms) between writes for python data window
+# define WRITE_INTERVAL 10
 
 /* ------------------------------- libraries -------------------------------- */
 
@@ -185,6 +185,7 @@ typedef struct s_arr_size
 	pthread_mutex_t	data_mutex;
 	int		running;
 	t_pipe_thread_data *thread_data;
+	pthread_mutex_t xm_mutex;
 }	t_sz;
 
 //	struct for images for the manual, independent from the map
@@ -227,9 +228,10 @@ typedef struct s_window
 
 typedef struct s_pipe_thread_data
 {
-	t_sz *map_data;
-	int pipe_index;
-} t_pipe_thread_data;
+	int		xposmw;
+	int		yposmw;
+	int		pipe_index;
+}	t_pipe_thread_data;
 
 /*
 --------------------------------- functions ------------------------------------

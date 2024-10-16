@@ -6,7 +6,7 @@
 #    By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/12 14:13:59 by fkeitel           #+#    #+#              #
-#    Updated: 2024/10/16 10:53:18 by fkeitel          ###   ########.fr        #
+#    Updated: 2024/10/16 11:02:09 by fkeitel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ mlx:
 	@if [ ! -d "MLX42" ]; then \
 		git clone https://github.com/codam-coding-college/MLX42.git MLX42; \
 	fi
-	@cd MLX42 && git fetch && git checkout f87c401e495dcf56e9162a2241d7761238bb189f && cmake -B build && cmake --build build -j4 \
+	@cd MLX42 && git fetch && git checkout f87c401e495dcf56e9162a2241d7761238bb189f && cmake -B build && cmake --build build -j4
 
 # Rule to build the project using MLX library
 $(NAME): mlx $(OBJS) $(LIBFTTARGET)

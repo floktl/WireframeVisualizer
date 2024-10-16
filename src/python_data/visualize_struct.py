@@ -96,6 +96,7 @@ try:
 						pipe1_buffer += line
 						if len(pipe1_buffer) == 8:
 							xposmw, yposmw = struct.unpack('ii', pipe1_buffer)
+							#print(xpos)
 							xpos_adjusted = xposmw - 512
 							ypos_adjusted = 512 - yposmw
 							update_plot(xpos_adjusted, ypos_adjusted)

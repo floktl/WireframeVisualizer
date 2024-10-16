@@ -5,9 +5,8 @@ import fcntl
 import matplotlib.pyplot as plt
 
 # Create a list for file descriptors (0-3 for 4 pipes)
-pipe_fds = [sys.stdin.fileno()] + list(range(3, 7))
+pipe_fds = [sys.stdin.fileno()] + list(range(3, 7))  # Replace with your actual pipe file descriptors
 
-#plt.style.use('fivethirtyeight')
 # Set pipes to non-blocking mode
 for fd in pipe_fds:
 	flags = fcntl.fcntl(fd, fcntl.F_GETFL)
@@ -21,12 +20,15 @@ axes = axes.flatten()
 # Initialize data for each plot
 data = [[] for _ in range(4)]
 rotation_data = {'x': [], 'y': [], 'z': []}
-pipe1_buffer= b''
+pipe1_buffer = b''
 pipe2_buffer = b''
+
+# Flag to indicate when to exit
+exit_program = False
 
 # Function to update the plot for rotation
 def update_rotation_plot(x_rot, y_rot, z_rot):
-	ax = axes[0]  # Graph 2 for rotations
+	ax = axes[0]  # Graph for rotations
 	ax.clear()
 	rotation_data['x'].append(x_rot)
 	rotation_data['y'].append(y_rot)
@@ -45,7 +47,7 @@ def update_rotation_plot(x_rot, y_rot, z_rot):
 
 # Function to update the plot for the other pipes
 def update_plot(x, y):
-	ax = axes[1]
+	ax = axes[1]  # Adjust index as necessary
 	ax.clear()
 	data[1].append((x, y))
 
@@ -62,12 +64,21 @@ def update_plot(x, y):
 		ax.plot(x_data, y_data, marker='o')
 	ax.set_title(f'Pipe {1 + 1} Data Plot')
 
+# Event handler for key press
+def on_key(event):
+	global exit_program
+	if event.key == 'escape':
+		exit_program = True  # Set the exit flag
+
+# Connect the key press event to the handler
+fig.canvas.mpl_connect('key_press_event', on_key)
+
 # Read from the pipes
 try:
 	print("Plot initialized")
-	while True:
+	while not exit_program:  # Loop until exit flag is set
 		for i in range(4):
-			if i == 1:
+			if i == 1:  # Pipe for rotation degrees
 				try:
 					line = os.read(pipe_fds[i], 12 - len(pipe2_buffer))
 					if line:
@@ -78,7 +89,7 @@ try:
 							pipe2_buffer = b''
 				except BlockingIOError:
 					continue
-			elif i == 2:
+			elif i == 2:  # Pipe for x and y coordinates
 				try:
 					line = os.read(pipe_fds[i], 8 - len(pipe1_buffer))
 					if line:
@@ -93,43 +104,11 @@ try:
 					continue
 			else:
 				continue
-		plt.pause(0.01)
+		plt.pause(0.01)  # Pause for a brief moment to update plots
 except KeyboardInterrupt:
 	print("Exiting due to keyboard interrupt.")
-	plt.close()
 
-#pipe1_buffer = b''  # for rotation degrees
-#pipe2_buffer = b''  # for x and y coordinates
-
-# try:
-# 	print("Plot initialized")
-# 	while True:
-# 		for i in range(4):
-# 			if i == 1:  # Pipe 1 for rotation degrees
-# 				try:
-# 					line = os.read(pipe_fds[i], 12 - len(pipe1_buffer))
-# 					if line:
-# 						pipe1_buffer += line
-# 						if len(pipe1_buffer) == 12:
-# 							x_rot, y_rot, z_rot = struct.unpack('iii', pipe1_buffer)
-# 							update_rotation_plot(x_rot, y_rot, z_rot)
-# 							pipe1_buffer = b''
-# 				except BlockingIOError:
-# 					continue
-# 			if i == 2:  # Pipe 2 for x and y coordinates
-# 				try:
-# 					line = os.read(pipe_fds[i], 8)
-# 					if line:
-# 						xposmw, yposmw = struct.unpack('ii', line)
-# 						xpos_adjusted = xposmw - 512
-# 						ypos_adjusted = 512 - yposmw
-# 						update_plot(i, xpos_adjusted, ypos_adjusted)
-# 				except BlockingIOError:
-# 					continue
-# 			# Pipe 3 and 4 can remain unused for now
-# except KeyboardInterrupt:
-# 	print("Plot terminated")
-
-plt.ioff()
-plt.tight_layout()
-plt.show()
+# Clean up and close the figure
+finally:
+	plt.close(fig)  # Close the figure properly
+	sys.exit(0)  # Exit the program

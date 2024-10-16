@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 13:51:31 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 08:40:57 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/16 09:14:28 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,45 +86,48 @@ void	*pipe_writer(void *arg)
 
 
 
-int	pipe_data_multithreaded(t_sz *map_data)
+int pipe_data_multithreaded(t_sz *map_data)
 {
-	pthread_t			threads[4];
-	t_pipe_thread_data	*thread_data;
-	int					i;
+	pthread_t threads[4];
+	t_pipe_thread_data *thread_data;
+	int i;
 
 	pthread_mutex_init(&map_data->data_mutex, NULL);
+	map_data->running = 1; // Set running flag to indicate that threads should run
+
 	thread_data = malloc(sizeof(t_pipe_thread_data) * 4);
 	if (!thread_data)
 	{
 		perror("Failed to allocate memory for thread data");
 		return (EXIT_FAILURE);
 	}
-	i = 0;
-	while (i < 4)
+
+	for (i = 0; i < 4; i++)
 	{
 		thread_data[i].map_data = map_data;
 		thread_data[i].pipe_index = i;
-		if (pthread_create(&threads[i], NULL,
-				pipe_writer, &thread_data[i]) != 0)
+		if (pthread_create(&threads[i], NULL, pipe_writer, &thread_data[i]) != 0)
 		{
 			perror("Failed to create thread");
 			free(thread_data);
 			return (EXIT_FAILURE);
 		}
-		i++;
+		pthread_detach(threads[i]); // Detach the thread to allow it to run independently
 	}
-	i = 0;
-	while (i < 4)
-		pthread_join(threads[i++], NULL);
-	free(thread_data);
+
+	// Store thread data for cleanup later (you could also use a global variable if needed)
+	map_data->thread_data = thread_data;
+
 	return (EXIT_SUCCESS);
 }
 
 
-int	main(int argc, char *argv[])
+
+
+int main(int argc, char *argv[])
 {
-	t_window	window;
-	int			i;
+	t_window window;
+	int i;
 
 	if (argc != 2)
 		return (ft_printf("usage: ./fdf <map>.fdf\n"), EXIT_FAILURE);
@@ -133,20 +136,40 @@ int	main(int argc, char *argv[])
 		|| set_coord(&window) == EXIT_FAILURE
 		|| create_pipe(&window) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+
 	free_map(window.map);
+
 	if (initialize_mlx_image(&window) == EXIT_FAILURE
 		|| pipe_data_multithreaded(&window.map_sz) == EXIT_FAILURE)
 		return (ft_shutdown_error(window.mlx));
+
 	mlx_resize_hook(window.mlx, ft_resize, &window);
 	mlx_scroll_hook(window.mlx, ft_scroll, &window);
 	mlx_loop_hook(window.mlx, ft_render, &window);
-	i = 0;
-	while (i < 4)
-		close(window.map_sz.pipe_fd[i++][1]);
+
+	// Main loop can perform its own tasks here
+	// For example, running until an exit condition or user input
+	while (1)
+	{
+		// Here, you can check for a termination condition,
+		// such as a key press or a specific event that signals to exit.
+
+		// For demonstration purposes, we will just sleep
+		usleep(100000); // Sleep for 0.1 seconds
+	}
+
+	// Clean up threads
+	// Setting the running flag to 0 will signal threads to stop
+	cleanup_threads(&window.map_sz); // Call this function to stop threads
+
+	// Close pipes and free resources
+	for (i = 0; i < 4; i++)
+		close(window.map_sz.pipe_fd[i][1]);
+
 	free_map_coordinates(&window.coord);
 	free_manual(&window.manual);
 	pthread_mutex_destroy(&window.map_sz.data_mutex);
 	mlx_terminate(window.mlx);
+
 	return (EXIT_SUCCESS);
 }
-

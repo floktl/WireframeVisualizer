@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:26:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 09:24:17 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/16 10:02:02 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@
 //	height_change between 0.001 and 0.5
 # define HEIGHT_FAKTOR 0.1
  // Time in microseconds (100ms) between writes for python data window
-#define WRITE_INTERVAL 5000
+#define WRITE_INTERVAL 50
 
 /* ------------------------------- libraries -------------------------------- */
 

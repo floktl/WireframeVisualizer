@@ -104,7 +104,7 @@ try:
 					continue
 			else:
 				continue
-		plt.pause(0.01)  # Pause for a brief moment to update plots
+		plt.pause(0.1)  # Pause for a brief moment to update plots
 except KeyboardInterrupt:
 	print("Exiting due to keyboard interrupt.")
 

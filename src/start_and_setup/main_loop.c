@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 09:45:33 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 08:08:42 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/16 09:59:14 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ void ft_render(void *param)
 	mlx_get_mouse_pos(window->mlx, &window->mouse_posx, &window->mouse_posy);
 	check_margin_border(window);
 	clear_image(window, DEFAULT_WINDOW_COLOR);
-	pthread_mutex_lock(&window->map_sz.data_mutex);
+	//pthread_mutex_lock(&window->map_sz.data_mutex);
 	if (ft_hook_key(window, &x_offset, &y_offset) == CHANGE)
 	{
 		update_coord(window, x_offset, y_offset);
 	}
 	print_debug_point_1(window);
 	print_debug_point_2(window);
-	pthread_mutex_unlock(&window->map_sz.data_mutex);
+	//pthread_mutex_unlock(&window->map_sz.data_mutex);
 	current = window->coord;
 	while (current != NULL && current->next != NULL)
 	{

@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 13:51:31 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 09:27:01 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/16 10:04:35 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
 // -----------------------------------------------------------------------------
-
-// Declare a mutex
 
 void	*pipe_writer(void *arg)
 {
@@ -42,10 +40,9 @@ void	*pipe_writer(void *arg)
 		{
 			if (map_data->pipe_fd[pipe_index][1] > 0)
 			{
-				pthread_mutex_lock(&map_data->data_mutex);
-
 				if (pipe_index == 0)
 				{
+					//pthread_mutex_lock(&map_data->data_mutex);
 					if (write(map_data->pipe_fd[pipe_index][1],
 						&map_data->xm_rot_deg, sizeof(int)) == -1 ||
 						write(map_data->pipe_fd[pipe_index][1],
@@ -53,24 +50,28 @@ void	*pipe_writer(void *arg)
 						write(map_data->pipe_fd[pipe_index][1],
 							&map_data->zm_rot_deg, sizeof(int)) == -1)
 					{
+						//pthread_mutex_unlock(&map_data->data_mutex);
 						perror("write error (rotation)");
 						close(map_data->pipe_fd[pipe_index][1]);
 						map_data->pipe_fd[pipe_index][1] = -1;
 					}
+					//pthread_mutex_unlock(&map_data->data_mutex);
 				}
 				else if (pipe_index > 0)
 				{
+					//pthread_mutex_lock(&map_data->data_mutex);
 					if (write(map_data->pipe_fd[pipe_index][1],
 						&map_data->xposmw, sizeof(int)) == -1 ||
 						write(map_data->pipe_fd[pipe_index][1],
 							&map_data->yposmw, sizeof(int)) == -1)
 					{
+						//pthread_mutex_unlock(&map_data->data_mutex);
 						perror("write error (position)");
 						close(map_data->pipe_fd[pipe_index][1]);
 						map_data->pipe_fd[pipe_index][1] = -1;
 					}
+					//pthread_mutex_unlock(&map_data->data_mutex);
 				}
-				pthread_mutex_unlock(&map_data->data_mutex);
 				last_write_time = current_time;
 			}
 			else
@@ -79,7 +80,7 @@ void	*pipe_writer(void *arg)
 					pipe_index, map_data->pipe_fd[pipe_index][1]);
 			}
 		}
-		usleep(1000);
+		usleep(50);
 	}
 	return (NULL);
 }
@@ -88,20 +89,18 @@ void	*pipe_writer(void *arg)
 
 int pipe_data_multithreaded(t_sz *map_data)
 {
-	pthread_t threads[4];
-	t_pipe_thread_data *thread_data;
-	int i;
+	pthread_t			threads[4];
+	t_pipe_thread_data	*thread_data;
+	int					i;
 
 	pthread_mutex_init(&map_data->data_mutex, NULL);
-	map_data->running = 1; // Set running flag to indicate that threads should run
-
+	map_data->running = 1;
 	thread_data = malloc(sizeof(t_pipe_thread_data) * 4);
 	if (!thread_data)
 	{
 		perror("Failed to allocate memory for thread data");
 		return (EXIT_FAILURE);
 	}
-
 	for (i = 0; i < 4; i++)
 	{
 		thread_data[i].map_data = map_data;
@@ -112,12 +111,9 @@ int pipe_data_multithreaded(t_sz *map_data)
 			free(thread_data);
 			return (EXIT_FAILURE);
 		}
-		pthread_detach(threads[i]); // Detach the thread to allow it to run independently
+		pthread_detach(threads[i]);
 	}
-
-	// Store thread data for cleanup later (you could also use a global variable if needed)
 	map_data->thread_data = thread_data;
-
 	return (EXIT_SUCCESS);
 }
 

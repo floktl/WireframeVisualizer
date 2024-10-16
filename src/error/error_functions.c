@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_functions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/09 15:54:00 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/14 17:10:36 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/16 08:44:10 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	check_more_defines(void)
 //	save shutdown function for the mlx window in case of an error occuring
 int	ft_shutdown_error(mlx_t *mlx)
 {
-	mlx_close_window(mlx);
+	if (mlx)
+		mlx_close_window(mlx);
 	return (perror(mlx_strerror(mlx_errno)), ERROR);
 }

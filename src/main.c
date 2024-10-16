@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 13:51:31 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 08:35:33 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/16 08:40:57 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,31 @@
 
 // Declare a mutex
 
-void *pipe_writer(void *arg)
+void	*pipe_writer(void *arg)
 {
-	t_pipe_thread_data *data;
-	int pipe_index;
-	t_sz *map_data;
-	struct timeval last_write_time = {0};
-	struct timeval current_time;
-	long elapsed_time;
+	t_pipe_thread_data	*data;
+	int					pipe_index;
+	t_sz				*map_data;
+	struct timeval		last_write_time = {0};
+	struct timeval		current_time;
+	long				elapsed_time;
 
 	data = (t_pipe_thread_data *)arg;
 	pipe_index = data->pipe_index;
 	map_data = data->map_data;
-
-	if (pipe_index < 0 || pipe_index >= 4) {
+	if (pipe_index < 0 || pipe_index >= 4)
+	{
 		fprintf(stderr, "Invalid pipe index: %d\n", pipe_index);
-		return NULL; // Exit early if index is invalid
+		return (NULL);
 	}
-
 	while (1)
 	{
 		gettimeofday(&current_time, NULL);
 		elapsed_time = (current_time.tv_sec - last_write_time.tv_sec) * 1000000
-					+ (current_time.tv_usec - last_write_time.tv_usec);
+			+ (current_time.tv_usec - last_write_time.tv_usec);
 		if (elapsed_time >= WRITE_INTERVAL)
 		{
-			if (map_data->pipe_fd[pipe_index][1] > 0) // Check only the write end
+			if (map_data->pipe_fd[pipe_index][1] > 0)
 			{
 				pthread_mutex_lock(&map_data->data_mutex);
 
@@ -82,33 +81,35 @@ void *pipe_writer(void *arg)
 		}
 		usleep(1000);
 	}
-	return NULL;
+	return (NULL);
 }
 
 
 
-int pipe_data_multithreaded(t_sz *map_data)
+int	pipe_data_multithreaded(t_sz *map_data)
 {
-	pthread_t threads[4];
-	t_pipe_thread_data *thread_data;
-	int i;
+	pthread_t			threads[4];
+	t_pipe_thread_data	*thread_data;
+	int					i;
 
+	pthread_mutex_init(&map_data->data_mutex, NULL);
 	thread_data = malloc(sizeof(t_pipe_thread_data) * 4);
 	if (!thread_data)
 	{
 		perror("Failed to allocate memory for thread data");
-		return EXIT_FAILURE;
+		return (EXIT_FAILURE);
 	}
 	i = 0;
 	while (i < 4)
 	{
 		thread_data[i].map_data = map_data;
 		thread_data[i].pipe_index = i;
-		if (pthread_create(&threads[i], NULL, pipe_writer, &thread_data[i]) != 0)
+		if (pthread_create(&threads[i], NULL,
+				pipe_writer, &thread_data[i]) != 0)
 		{
 			perror("Failed to create thread");
 			free(thread_data);
-			return EXIT_FAILURE;
+			return (EXIT_FAILURE);
 		}
 		i++;
 	}
@@ -116,7 +117,7 @@ int pipe_data_multithreaded(t_sz *map_data)
 	while (i < 4)
 		pthread_join(threads[i++], NULL);
 	free(thread_data);
-	return EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
 }
 
 
@@ -133,7 +134,6 @@ int	main(int argc, char *argv[])
 		|| create_pipe(&window) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	free_map(window.map);
-	pthread_mutex_init(&window.map_sz.data_mutex, NULL);
 	if (initialize_mlx_image(&window) == EXIT_FAILURE
 		|| pipe_data_multithreaded(&window.map_sz) == EXIT_FAILURE)
 		return (ft_shutdown_error(window.mlx));

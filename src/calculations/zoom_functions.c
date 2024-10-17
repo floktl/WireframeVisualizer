@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 17:02:49 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 11:36:56 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/17 10:44:19 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void	ft_scroll(double xoffset, double yoffset, void *param)
 	t_window	*window;
 
 	window = (t_window *)param;
-
 	if (window->zoom != ZOOM_DEFAULT && xoffset)
 		return ;
 	if (yoffset < 0)

@@ -75,7 +75,7 @@ fig.canvas.mpl_connect('key_press_event', on_key)
 
 # Read from the pipes
 try:
-	print("Plot initialized")
+	print("\nPython: Plot initialized")
 	while not exit_program:  # Loop until exit flag is set
 		for i in range(4):
 			if i == 1:  # Pipe for rotation degrees

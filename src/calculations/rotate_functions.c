@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:32:30 by flo               #+#    #+#             */
-/*   Updated: 2024/10/16 11:36:18 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/17 10:46:15 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,11 @@ void	rotate(double *a, double *b, t_window window, char axis)
 		new_a = (*b) * ft_cos(rad) - (*a) * ft_sin(rad);
 		new_b = (*a) * ft_cos(rad) + (*b) * ft_sin(rad);
 	}
-	else if (axis == 'Z')
+	else
 	{
 		rad = window.map_sz.zm_rot_deg * (PI / 180.0);
 		new_a = (*a) * ft_cos(rad) - (*b) * ft_sin(rad);
 		new_b = (*a) * ft_sin(rad) + (*b) * ft_cos(rad);
-	}
-	else
-	{
-		new_a = 0;
-		new_b = 0;
 	}
 	*a = new_a;
 	*b = new_b;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 09:45:33 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 18:07:30 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/17 09:59:11 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,41 @@
 //-------------- main loop for the programm, it runs constantly----------------
 //
 
-// fills the window with the map rendered in 3D functionality
-void ft_render(void *param)
+//	function to update the thread struct with the current data changes
+void	update_thread_struct(t_window *window)
 {
-	(void)param;
-	t_window *window;
-	t_coord *current;
-	int x_offset;
-	int y_offset;
+	struct timeval	last_write_time;
+	struct timeval	current_time;
+	long			elapsed_time;
+	int				i;
+
+	gettimeofday(&current_time, NULL);
+	elapsed_time = (current_time.tv_sec - last_write_time.tv_sec) * 1000000
+		+ (current_time.tv_usec - last_write_time.tv_usec);
+	if (elapsed_time >= 10000)
+	{
+		i = 0;
+		while (i < 4)
+		{
+			pthread_mutex_lock(&window->thread_data[i].data_mutex);
+			window->thread_data[i].xposmw = window->map_sz.xposmw;
+			window->thread_data[i].yposmw = window->map_sz.yposmw;
+			window->thread_data[i].rot_x = window->map_sz.xm_rot_deg;
+			window->thread_data[i].rot_y = window->map_sz.ym_rot_deg;
+			window->thread_data[i].rot_z = window->map_sz.zm_rot_deg;
+			pthread_mutex_unlock(&window->thread_data[i++].data_mutex);
+		}
+		last_write_time = current_time;
+	}
+}
+
+// fills the window with the map rendered in 3D functionality
+void	ft_render(void *param)
+{
+	t_window	*window;
+	t_coord		*current;
+	int			x_offset;
+	int			y_offset;
 
 	x_offset = 0;
 	y_offset = 0;
@@ -32,14 +59,10 @@ void ft_render(void *param)
 	mlx_get_mouse_pos(window->mlx, &window->mouse_posx, &window->mouse_posy);
 	check_margin_border(window);
 	clear_image(window, DEFAULT_WINDOW_COLOR);
-	//pthread_mutex_lock(&window->map_sz.data_mutex);
 	if (ft_hook_key(window, &x_offset, &y_offset) == CHANGE)
-	{
 		update_coord(window, x_offset, y_offset);
-	}
 	print_debug_point_1(window);
 	print_debug_point_2(window);
-	//pthread_mutex_unlock(&window->map_sz.data_mutex);
 	current = window->coord;
 	while (current != NULL && current->next != NULL)
 	{
@@ -48,16 +71,7 @@ void ft_render(void *param)
 		connect_points(window, current, current->next_y);
 		current = current->next;
 	}
-	for (int i = 0; i < 4; i++)
-	{
-		pthread_mutex_lock(&window->thread_data[i].data_mutex);
-		window->thread_data[i].xposmw = window->map_sz.xposmw;
-		window->thread_data[i].yposmw = window->map_sz.yposmw;
-		window->thread_data[i].rot_x = window->map_sz.xm_rot_deg;
-		window->thread_data[i].rot_y = window->map_sz.ym_rot_deg;
-		window->thread_data[i].rot_z = window->map_sz.zm_rot_deg;
-		pthread_mutex_unlock(&window->thread_data[i].data_mutex);
-	}
+	update_thread_struct(window);
 }
 
 //	hook functions for keyboard user input:

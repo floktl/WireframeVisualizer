@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   help_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:28:26 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 06:19:12 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/17 10:45:15 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,7 @@ int32_t	convert_str_to_hex(char *hex_str)
 		else if (digit >= 'A' && digit <= 'F')
 			digit_value = 10 + (digit - 'A');
 		else
-		{
-			ft_printf("color code not hexadezimal ");
-			return (EXIT_FAILURE);
-		}
+			return (ft_printf("color code not hexadezimal "), EXIT_FAILURE);
 		hex_value = (hex_value << 4) | digit_value;
 		digit = hex_str[++i];
 	}

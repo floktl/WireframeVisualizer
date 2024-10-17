@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:26:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 19:10:17 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/17 10:18:23 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@
 //	height_change between 0.001 and 0.5
 # define HEIGHT_FAKTOR 0.1
 // Time in microseconds (100ms) between writes for python data window
-# define WRITE_INTERVAL 10
+# define WRITE_INTERVAL 16666
 
 /* ------------------------------- libraries -------------------------------- */
 
@@ -104,8 +104,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
-#include <sys/time.h> // for gettimeofday
-#include <pthread.h> // for multithreading to send Data continously
+# include <sys/time.h> // for gettimeofday
+# include <pthread.h> // for multithreading to send Data continously
+# include <errno.h>
 
 /* -------------------------------- structs --------------------------------- */
 
@@ -422,6 +423,16 @@ int		zoom_calc(t_window *window, t_coord *cur_point);
 //------------------------------ python data --------------------------------
 
 //	pipe_data
+
 int		create_pipe(t_window *window);
+void	write_data_in_buf(t_pipe_thread_data *data,
+			char *buffer, ssize_t *write_sz);
+int		write_into_pipes(t_pipe_thread_data *data);
+
+//	threads
+
+void	*pipe_writer(void *arg);
+int		pipe_data_multithreaded(t_window *window);
+void	cleanup_threads(t_sz *map_data);
 
 #endif

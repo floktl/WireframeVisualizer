@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_initiate.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 20:53:16 by flo               #+#    #+#             */
-/*   Updated: 2024/10/16 10:40:50 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/16 18:24:44 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	initialize_mlx_image(t_window *window)
 	ft_printf("\033[0;35mInitializing Window...\033[0m\n");
 	window->mlx = mlx_init(WIDTH, HEIGHT, "fdf", true);
 	if (!(window->mlx))
-		return (printf("test\n"), EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	window->image = mlx_new_image(window->mlx, WIDTH, HEIGHT);
 	if (!(window->image)
 		|| mlx_image_to_window(window->mlx, window->image, 0, 0) == ERROR)

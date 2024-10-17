@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:26:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 11:50:02 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/16 19:10:17 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,11 +181,8 @@ typedef struct s_arr_size
 	int32_t	color_plus;
 	int32_t	color_minus;
 	int		map_area;
-	int		pipe_fd[4][2];
 	pthread_mutex_t	data_mutex;
 	int		running;
-	t_pipe_thread_data *thread_data;
-	pthread_mutex_t xm_mutex;
 }	t_sz;
 
 //	struct for images for the manual, independent from the map
@@ -224,13 +221,20 @@ typedef struct s_window
 	t_coord		debug_point_4;
 	float		max_zoom_size;
 	float		min_zoom_size;
+	t_pipe_thread_data	*thread_data;
+	pthread_t			*threads;
 }	t_window;
 
 typedef struct s_pipe_thread_data
 {
-	int		xposmw;
-	int		yposmw;
-	int		pipe_index;
+	int				xposmw;
+	int				yposmw;
+	int				rot_x;
+	int				rot_y;
+	int				rot_z;
+	int				pipe_index;
+	int				pipe_fd[2];
+	pthread_mutex_t	data_mutex;
 }	t_pipe_thread_data;
 
 /*

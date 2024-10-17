@@ -5,7 +5,7 @@ import fcntl
 import matplotlib.pyplot as plt
 
 # Create a list for file descriptors (0-3 for 4 pipes)
-pipe_fds = [sys.stdin.fileno()] + list(range(3, 7))  # Replace with your actual pipe file descriptors
+pipe_fds = [sys.stdin.fileno()] + list(range(3, 7))
 
 # Set pipes to non-blocking mode
 for fd in pipe_fds:
@@ -80,32 +80,43 @@ try:
 		for i in range(4):
 			if i == 1:  # Pipe for rotation degrees
 				try:
+					# Read the data for rotation degrees
 					line = os.read(pipe_fds[i], 12 - len(pipe2_buffer))
 					if line:
 						pipe2_buffer += line
+						# Check if we have enough data for unpacking
 						if len(pipe2_buffer) == 12:
 							x_rot, y_rot, z_rot = struct.unpack('iii', pipe2_buffer)
 							update_rotation_plot(x_rot, y_rot, z_rot)
-							pipe2_buffer = b''
+							pipe2_buffer = b''  # Reset buffer after processing
+					else:
+						# Handle EOF condition if no data is returned
+						break
 				except BlockingIOError:
-					continue
+					continue  # No data available, continue to the next iteration
+
 			elif i == 2:  # Pipe for x and y coordinates
 				try:
+					# Read the data for x and y coordinates
 					line = os.read(pipe_fds[i], 8 - len(pipe1_buffer))
 					if line:
 						pipe1_buffer += line
+						# Check if we have enough data for unpacking
 						if len(pipe1_buffer) == 8:
 							xposmw, yposmw = struct.unpack('ii', pipe1_buffer)
-							#print(xpos)
+							# Adjust the positions
 							xpos_adjusted = xposmw - 512
 							ypos_adjusted = 512 - yposmw
 							update_plot(xpos_adjusted, ypos_adjusted)
-							pipe1_buffer = b''
+							pipe1_buffer = b''  # Reset buffer after processing
+					else:
+						# Handle EOF condition if no data is returned
+						break
 				except BlockingIOError:
-					continue
-			else:
-				continue
-		plt.pause(0.1)  # Pause for a brief moment to update plots
+					continue  # No data available, continue to the next iteration
+
+		plt.pause(0.0001)  # Pause for a brief moment to update plots
+
 except KeyboardInterrupt:
 	print("Exiting due to keyboard interrupt.")
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 09:45:33 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 13:16:00 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/16 18:07:30 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,16 @@ void ft_render(void *param)
 		connect_points(window, current, current->next_y);
 		current = current->next;
 	}
-	
+	for (int i = 0; i < 4; i++)
+	{
+		pthread_mutex_lock(&window->thread_data[i].data_mutex);
+		window->thread_data[i].xposmw = window->map_sz.xposmw;
+		window->thread_data[i].yposmw = window->map_sz.yposmw;
+		window->thread_data[i].rot_x = window->map_sz.xm_rot_deg;
+		window->thread_data[i].rot_y = window->map_sz.ym_rot_deg;
+		window->thread_data[i].rot_z = window->map_sz.zm_rot_deg;
+		pthread_mutex_unlock(&window->thread_data[i].data_mutex);
+	}
 }
 
 //	hook functions for keyboard user input:

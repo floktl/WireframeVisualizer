@@ -1,5 +1,7 @@
 {
 	"files.associations": {
-		"fdf.h": "c"
+		"fdf.h": "c",
+		"ostream": "c",
+		"mlx42.h": "c"
 	}
 }

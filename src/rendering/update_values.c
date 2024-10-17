@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   update_values.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 08:24:45 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 11:30:45 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/16 17:31:41 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ int32_t	update_coord(t_window *window, int x_offset, int y_offset)
 	temp = window->coord;
 	window->map_sz.xm_offset += x_offset;
 	window->map_sz.ym_offset += y_offset;
-	pthread_mutex_lock(&window->map_sz.xm_mutex);
 	window->map_sz.xposmw += x_offset;
-	pthread_mutex_unlock(&window->map_sz.xm_mutex);
 	window->map_sz.yposmw += y_offset;
 	calculate_zoom_pos(window);
 	calculate_height_change(window);
@@ -69,10 +67,8 @@ int	calculate_height_change(t_window *window)
 //	function to set the map size to the default values
 void	reset_map_size(t_window *window)
 {
-	pthread_mutex_lock(&window->map_sz.xm_mutex);
 	window->map_sz.maxsz_x_p = window->map_sz.xposmw;
 	window->map_sz.maxsz_x_m = window->map_sz.xposmw;
-	pthread_mutex_unlock(&window->map_sz.xm_mutex);
 	window->map_sz.maxsz_y_p = window->map_sz.yposmw;
 	window->map_sz.maxsz_y_m = window->map_sz.yposmw;
 	window->map_sz.maxsz_z_p = Z;

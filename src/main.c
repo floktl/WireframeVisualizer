@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 13:51:31 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/17 10:18:14 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/18 20:37:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	free_map(window.map);
 	if (initialize_mlx_image(&window) == EXIT_FAILURE)
-		return (ft_shutdown_error(window.mlx));
+		return (kill_python_process(&window.python_pid),
+			ft_shutdown_error(window.mlx));
 	mlx_resize_hook(window.mlx, ft_resize, &window);
 	mlx_scroll_hook(window.mlx, ft_scroll, &window);
 	mlx_loop_hook(window.mlx, ft_render, &window);
@@ -38,5 +39,7 @@ int	main(int argc, char *argv[])
 	free_manual(&window.manual);
 	pthread_mutex_destroy(&window.map_sz.data_mutex);
 	mlx_terminate(window.mlx);
+	kill_python_process(&window.python_pid);
+	system("leaks fdf");
 	return (EXIT_SUCCESS);
 }

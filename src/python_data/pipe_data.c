@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:04:14 by flo               #+#    #+#             */
-/*   Updated: 2024/10/17 11:02:57 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/18 21:03:31 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,12 @@
 //	function to fork the process to execute the python script and open the pipes
 int	execute_python_script(t_window *window)
 {
-	pid_t	pid;
 	int		i;
 
-	pid = fork();
-	if (pid == -1)
+	window->python_pid = fork();
+	if (window->python_pid == -1)
 		return (perror("fork"), EXIT_FAILURE);
-	else if (pid == 0)
+	else if (window->python_pid == 0)
 	{
 		i = 0;
 		ft_printf("\n\033[0;35mRedirecting pipes...\033[0m\n");
@@ -61,6 +60,11 @@ int	create_pipe(t_window *window)
 		printf("\033[0;34mPipe %d:\033[0m read fd = %d, write fd = %d\n",
 			i, window->thread_data[i].pipe_fd[0],
 			window->thread_data[i].pipe_fd[1]);
+		window->thread_data[i].rot_x = window->map_sz.xm_rot_deg;
+		window->thread_data[i].rot_y = window->map_sz.ym_rot_deg;
+		window->thread_data[i].rot_z = window->map_sz.zm_rot_deg;
+		window->thread_data[i].xposmw = window->map_sz.xposmw;
+		window->thread_data[i].yposmw = window->map_sz.yposmw;
 		i++;
 	}
 	if (execute_python_script(window) == EXIT_FAILURE)
@@ -72,52 +76,78 @@ int	create_pipe(t_window *window)
 }
 
 //	function to write the data in a buffer
-void	write_data_in_buf(t_pipe_thread_data *data,
-	char *buffer, ssize_t *write_sz)
+int	write_data_in_buf(t_pipe_thread_data *data,
+	ssize_t *write_sz, ssize_t *bytes_written)
 {
-	pthread_mutex_lock(&data->data_mutex);
+	char	buffer[12];
+
+	int z;
+	z = 0;
 	if (data->pipe_index == 0)
 	{
+		pthread_mutex_lock(&data->data_mutex);
 		memcpy(buffer, &data->rot_x, sizeof(int));
 		memcpy(buffer + sizeof(int), &data->rot_y, sizeof(int));
 		memcpy(buffer + 2 * sizeof(int), &data->rot_z, sizeof(int));
+		pthread_mutex_unlock(&data->data_mutex);
 		*write_sz = 3 * sizeof(int);
 	}
 	else if (data->pipe_index == 1)
 	{
+		pthread_mutex_lock(&data->data_mutex);
 		memcpy(buffer, &data->xposmw, sizeof(int));
 		memcpy(buffer + sizeof(int), &data->yposmw, sizeof(int));
+		pthread_mutex_unlock(&data->data_mutex);
 		*write_sz = 2 * sizeof(int);
 	}
-	pthread_mutex_unlock(&data->data_mutex);
+	(void)z;
+	*bytes_written = write(data->pipe_fd[1], buffer, *write_sz);
+	if (*bytes_written != *write_sz)
+		return (-1);
+	return (0);
 }
 
-//	function to write data values in the struc tusing a buffer
+//	function to write data values in the struct using a buffer
 int	write_into_pipes(t_pipe_thread_data *data)
 {
-	char	buffer[12];
 	ssize_t	write_size;
 	ssize_t	bytes_written;
 
 	if (data->pipe_fd[1] <= 0)
 		return (fprintf(stderr, "Invalid pipe %d\n", data->pipe_fd[1]), -1);
 	bytes_written = 0;
-	write_data_in_buf(data, buffer, &write_size);
-	bytes_written = write(data->pipe_fd[1], buffer, write_size);
-	if (bytes_written != write_size)
+	write_size = 0;
+	if (write_data_in_buf(data, &write_size, &bytes_written) == -1)
 	{
-		if (bytes_written == -1)
-			fprintf(stderr, "Write error on pipe %d: %s\n",
-				data->pipe_index, strerror(errno));
-		else
-			fprintf(stderr, "Partial write on pipe %d: %zd/%zd bytes\n",
-				data->pipe_index, bytes_written, write_size);
 		if (errno != EAGAIN && errno != EWOULDBLOCK)
 		{
 			close(data->pipe_fd[1]);
 			data->pipe_fd[1] = -1;
 			return (-1);
 		}
+		if (bytes_written == -1)
+			fprintf(stderr, "Write error on pipe %d: %s\n",
+				data->pipe_index, strerror(errno));
+		else
+			fprintf(stderr, "Partial write on pipe %d: %zd/%zd bytes\n",
+				data->pipe_index, bytes_written, write_size);
 	}
 	return (0);
+}
+
+//	function to kill the data visualisation script before exiting the c program
+void kill_python_process(pid_t *python_pid)
+{
+	if (*python_pid > 0)
+	{
+		if (kill(*python_pid, SIGTERM) == -1)
+		{
+			perror("Failed to kill Python process");
+		}
+		else
+		{
+			ft_printf("Killed Python data-visualization script process!\n");
+			*python_pid = -1;
+		}
+	}
 }

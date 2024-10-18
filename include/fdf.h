@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:26:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/17 10:18:23 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/18 20:32:50 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@
 //	height_change between 0.001 and 0.5
 # define HEIGHT_FAKTOR 0.1
 // Time in microseconds (100ms) between writes for python data window
-# define WRITE_INTERVAL 16666
+# define WRITE_INTERVAL 40000
 
 /* ------------------------------- libraries -------------------------------- */
 
@@ -107,6 +107,7 @@
 # include <sys/time.h> // for gettimeofday
 # include <pthread.h> // for multithreading to send Data continously
 # include <errno.h>
+# include <signal.h> // for kill function
 
 /* -------------------------------- structs --------------------------------- */
 
@@ -222,6 +223,7 @@ typedef struct s_window
 	t_coord		debug_point_4;
 	float		max_zoom_size;
 	float		min_zoom_size;
+	pid_t		python_pid;
 	t_pipe_thread_data	*thread_data;
 	pthread_t			*threads;
 }	t_window;
@@ -425,9 +427,10 @@ int		zoom_calc(t_window *window, t_coord *cur_point);
 //	pipe_data
 
 int		create_pipe(t_window *window);
-void	write_data_in_buf(t_pipe_thread_data *data,
-			char *buffer, ssize_t *write_sz);
+int		write_data_in_buf(t_pipe_thread_data *data,
+			ssize_t *write_sz, ssize_t *bytes_written);
 int		write_into_pipes(t_pipe_thread_data *data);
+void kill_python_process(pid_t *python_pid);
 
 //	threads
 

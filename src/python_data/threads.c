@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 10:14:58 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/17 10:44:43 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/18 19:40:04 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void	*pipe_writer(void *arg)
 {
 	t_pipe_thread_data	*data;
-	struct timeval		last_write_time;
+	static struct timeval last_write_time = {0};
 	struct timeval		current_time;
 	long				elapsed_time;
 
@@ -35,7 +35,7 @@ void	*pipe_writer(void *arg)
 			last_write_time = current_time;
 		}
 		else
-			usleep(1000);
+			usleep(100);
 	}
 	return (NULL);
 }

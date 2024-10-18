@@ -62,13 +62,15 @@ def update_plot(x, y):
 	if data[1]:
 		x_data, y_data = zip(*data[1])
 		ax.plot(x_data, y_data, marker='o')
-	ax.set_title(f'Pipe {1 + 1} Data Plot')
+	ax.set_title(f'Map middle position for Pipe 2')
 
 # Event handler for key press
 def on_key(event):
 	global exit_program
 	if event.key == 'escape':
 		exit_program = True  # Set the exit flag
+		plt.close(fig)
+		print("Escape key pressed. Exiting program.")
 
 # Connect the key press event to the handler
 fig.canvas.mpl_connect('key_press_event', on_key)
@@ -76,51 +78,45 @@ fig.canvas.mpl_connect('key_press_event', on_key)
 # Read from the pipes
 try:
 	print("\nPython: Plot initialized")
-	while not exit_program:  # Loop until exit flag is set
+	while not exit_program:
 		for i in range(4):
-			if i == 1:  # Pipe for rotation degrees
+			if i == 1:
 				try:
-					# Read the data for rotation degrees
 					line = os.read(pipe_fds[i], 12 - len(pipe2_buffer))
 					if line:
 						pipe2_buffer += line
-						# Check if we have enough data for unpacking
 						if len(pipe2_buffer) == 12:
 							x_rot, y_rot, z_rot = struct.unpack('iii', pipe2_buffer)
 							update_rotation_plot(x_rot, y_rot, z_rot)
-							pipe2_buffer = b''  # Reset buffer after processing
+							pipe2_buffer = b''
 					else:
-						# Handle EOF condition if no data is returned
 						break
 				except BlockingIOError:
-					continue  # No data available, continue to the next iteration
+					continue
 
-			elif i == 2:  # Pipe for x and y coordinates
+			elif i == 2:
 				try:
-					# Read the data for x and y coordinates
 					line = os.read(pipe_fds[i], 8 - len(pipe1_buffer))
 					if line:
 						pipe1_buffer += line
-						# Check if we have enough data for unpacking
 						if len(pipe1_buffer) == 8:
 							xposmw, yposmw = struct.unpack('ii', pipe1_buffer)
-							# Adjust the positions
 							xpos_adjusted = xposmw - 512
 							ypos_adjusted = 512 - yposmw
 							update_plot(xpos_adjusted, ypos_adjusted)
-							pipe1_buffer = b''  # Reset buffer after processing
+							pipe1_buffer = b''
 					else:
-						# Handle EOF condition if no data is returned
 						break
 				except BlockingIOError:
-					continue  # No data available, continue to the next iteration
+					continue
 
-		plt.pause(0.0001)  # Pause for a brief moment to update plots
+		plt.pause(0.0001)
 
 except KeyboardInterrupt:
 	print("Exiting due to keyboard interrupt.")
 
-# Clean up and close the figure
 finally:
-	plt.close(fig)  # Close the figure properly
-	sys.exit(0)  # Exit the program
+	plt.close(fig)
+	sys.exit(0)
+
+# multithreading and better response time missing

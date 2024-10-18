@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 09:45:33 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/17 09:59:11 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/18 20:52:24 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 //	function to update the thread struct with the current data changes
 void	update_thread_struct(t_window *window)
 {
-	struct timeval	last_write_time;
+	static struct timeval	last_write_time = {0};
 	struct timeval	current_time;
 	long			elapsed_time;
 	int				i;
@@ -33,8 +33,8 @@ void	update_thread_struct(t_window *window)
 		while (i < 4)
 		{
 			pthread_mutex_lock(&window->thread_data[i].data_mutex);
-			window->thread_data[i].xposmw = window->map_sz.xposmw;
-			window->thread_data[i].yposmw = window->map_sz.yposmw;
+			window->thread_data[i].xposmw = window->mouse_posx;
+			window->thread_data[i].yposmw = window->mouse_posy;
 			window->thread_data[i].rot_x = window->map_sz.xm_rot_deg;
 			window->thread_data[i].rot_y = window->map_sz.ym_rot_deg;
 			window->thread_data[i].rot_z = window->map_sz.zm_rot_deg;

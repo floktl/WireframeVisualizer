@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 09:45:33 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/19 07:14:09 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/20 07:37:34 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 void	update_thread_struct(t_win_data *window)
 {
 	static struct timeval	last_write_time = {0};
-	struct timeval	current_time;
-	long			elapsed_time;
-	int				i;
+	struct timeval			current_time;
+	long					elapsed_time;
+	int						i;
 
 	gettimeofday(&current_time, NULL);
 	elapsed_time = (current_time.tv_sec - last_write_time.tv_sec) * 1000000
@@ -31,36 +31,7 @@ void	update_thread_struct(t_win_data *window)
 	{
 		i = 0;
 		while (i < 4)
-		{
-			if (i == 0)
-			{
-				pthread_mutex_lock(&window->thread_data[i].data_mutex);
-				window->thread_data[i].value1 = window->map_sz.xm_rot_deg;
-				window->thread_data[i].value2 = window->map_sz.ym_rot_deg;
-				window->thread_data[i].value3 = window->map_sz.zm_rot_deg;
-				pthread_mutex_unlock(&window->thread_data[i++].data_mutex);
-			}
-			else if (i == 1)
-			{
-				pthread_mutex_lock(&window->thread_data[i].data_mutex);
-				window->thread_data[i].value1 = window->map_sz.xposmw;
-				window->thread_data[i].value2 = window->map_sz.yposmw;
-				pthread_mutex_unlock(&window->thread_data[i++].data_mutex);
-			}
-			else if (i == 2)
-			{
-				pthread_mutex_lock(&window->thread_data[i].data_mutex);
-				window->thread_data[i].value1 = window->mouse_posx;
-				window->thread_data[i].value2 = window->mouse_posy;
-				pthread_mutex_unlock(&window->thread_data[i++].data_mutex);
-			}
-			else if (i == 3)
-			{
-				pthread_mutex_lock(&window->thread_data[i].data_mutex);
-				window->thread_data[i].value1 = window->map_sz.map_area;
-				pthread_mutex_unlock(&window->thread_data[i++].data_mutex);
-			}
-		}
+			assign_values_to_data_struct(window, i++);
 		last_write_time = current_time;
 	}
 }

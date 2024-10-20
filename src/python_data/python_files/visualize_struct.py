@@ -43,6 +43,8 @@ class DataPlotter:
 	def _setup_pipes(self):
 		"""Set up non-blocking pipes"""
 		for fd in self.pipe_fds:
+			if not fd:
+				return
 			flags = fcntl.fcntl(fd, fcntl.F_GETFL)
 			fcntl.fcntl(fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
@@ -126,7 +128,7 @@ class DataPlotter:
 			# Main loop for updating plots
 			while not self.exit_program:
 				self._process_queue_data()
-				plt.pause(0.001)  # Slightly longer pause for better performance
+				plt.pause(0.1)  # Slightly longer pause for better performance
 
 		except KeyboardInterrupt:
 			print("Exiting due to keyboard interrupt.")

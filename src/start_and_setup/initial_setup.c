@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initial_setup.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:28:34 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/18 21:26:15 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/20 07:42:12 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int	assign_map_values(int32_t ***map_x_axis, char **collumn, int line)
 //	only for the whole map at once, not every unique coordinate
 int	get_map_size(t_win_data *window)
 {
-	t_map_data		size;
+	t_map_data	size;
 	t_win_data	*temp;
 
 	size.ym_size = 0;

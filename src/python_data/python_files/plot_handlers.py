@@ -34,7 +34,7 @@ class PlotHandlers:
 
 		if data_points:
 			x_data, y_data = zip(*data_points)
-			ax.plot(x_data, y_data, marker='o')
+			ax.plot(x_data, y_data, marker='o', markersize=0.5, color='red')
 		ax.set_title(title)
 
 	@staticmethod
@@ -45,7 +45,7 @@ class PlotHandlers:
 		radius = np.sqrt(area / np.pi)
 		PlotHandlers.setup_plot_common(ax)
 
-		circle = plt.Circle((0, 0), radius, color='blue', fill=False)
+		circle = plt.Circle((0, 0), radius, color='blue', fill=True)
 		ax.add_artist(circle)
 		ax.set_aspect('equal')
 		ax.set_title(f'Map Area: {area} square units')

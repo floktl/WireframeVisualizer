@@ -3,5 +3,6 @@
 		"fdf.h": "c",
 		"ostream": "c",
 		"mlx42.h": "c"
-	}
+	},
+	"cmake.sourceDirectory": "/Users/fkeitel/Desktop/42/WireframeVisualizer/MLX42"
 }

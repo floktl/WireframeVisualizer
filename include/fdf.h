@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:26:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/19 18:11:43 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/20 11:58:12 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@
 //	height_change between 0.001 and 0.5
 # define HEIGHT_FAKTOR 0.1
 // Time in microseconds (100ms) between writes for python data window
-# define WRITE_INTERVAL 40000
+# define WRITE_INTERVAL 166660
 
 /* ------------------------------- libraries -------------------------------- */
 
@@ -152,7 +152,7 @@ typedef struct s_coordinates
 	struct s_coordinates	*before_y;
 }	t_coord;
 
-typedef struct s_pipe_thread_data t_pipe_thread_data;
+typedef struct s_pipe_thread_data	t_pipe_thread_data;
 
 // size of the map, each point is one value
 // x = x-axis coordinate , y = y-axis z = z = z-axis
@@ -160,31 +160,30 @@ typedef struct s_pipe_thread_data t_pipe_thread_data;
 //
 typedef struct s_arr_size
 {
-	int		xm_size;
-	int		ym_size;
-	int		maxsz_x_p;
-	int		maxsz_x_m;
-	int		maxsz_y_p;
-	int		maxsz_y_m;
-	int		maxsz_z_p;
-	int		maxsz_z_m;
-	int		xposmw;
-	int		yposmw;
-	int		zcentmw;
-	int		zmcent_plus;
-	int		zmcent_minus;
-	double	xm_offset;
-	double	ym_offset;
-	double	zm_offset;
-	int		xm_rot_deg;
-	int		ym_rot_deg;
-	int		zm_rot_deg;
-	double	height_change;
-	int32_t	color_plus;
-	int32_t	color_minus;
-	int		map_area;
+	int				xm_size;
+	int				ym_size;
+	int				maxsz_x_p;
+	int				maxsz_x_m;
+	int				maxsz_y_p;
+	int				maxsz_y_m;
+	int				maxsz_z_p;
+	int				maxsz_z_m;
+	int				xposmw;
+	int				yposmw;
+	int				zcentmw;
+	int				zmcent_plus;
+	int				zmcent_minus;
+	double			xm_offset;
+	double			ym_offset;
+	double			zm_offset;
+	int				xm_rot_deg;
+	int				ym_rot_deg;
+	int				zm_rot_deg;
+	double			height_change;
+	int32_t			color_plus;
+	int32_t			color_minus;
+	int				map_area;
 	pthread_mutex_t	data_mutex;
-	int		running;
 }	t_map_data;
 
 //	struct for images for the manual, independent from the map
@@ -199,42 +198,40 @@ typedef struct s_manual
 // are the coordinates for each points, map size with map size values
 typedef struct s_window
 {
-	mlx_t		*mlx;
-	mlx_t		*mlx_info;
-	mlx_image_t	*image;
-	mlx_image_t	*man;
-	t_man		*manual;
-	int			width;
-	int			height;
-	void		*win;
-	int32_t		***map;
-	t_map_data		map_sz;
-	t_coord		*coord;
-	int			cent_xw;
-	int			cent_yw;
-	double		zoom;
-	int			start_size;
-	int			debug_mode;
-	int			mouse_posx;
-	int			mouse_posy;
-	t_coord		debug_point_1;
-	t_coord		debug_point_2;
-	t_coord		debug_point_3;
-	t_coord		debug_point_4;
-	float		max_zoom_size;
-	float		min_zoom_size;
-	pid_t		python_pid;
+	mlx_t				*mlx;
+	mlx_t				*mlx_info;
+	mlx_image_t			*image;
+	mlx_image_t			*man;
+	t_man				*manual;
+	int					width;
+	int					height;
+	void				*win;
+	int32_t				***map;
+	t_map_data			map_sz;
+	t_coord				*coord;
+	int					cent_xw;
+	int					cent_yw;
+	double				zoom;
+	int					start_size;
+	int					debug_mode;
+	int					mouse_posx;
+	int					mouse_posy;
+	t_coord				debug_point_1;
+	t_coord				debug_point_2;
+	t_coord				debug_point_3;
+	t_coord				debug_point_4;
+	float				max_zoom_size;
+	float				min_zoom_size;
+	pid_t				python_pid;
 	t_pipe_thread_data	*thread_data;
 	pthread_t			*threads;
 }	t_win_data;
 
 typedef struct s_pipe_thread_data
 {
-	int				value1;
-	int				value2;
-	int				value3;
-	int				value4;
 	int				pipe_index;
+	int				data_buf[12];
+	ssize_t			write_size;
 	int				pipe_fd[2];
 	pthread_mutex_t	data_mutex;
 }	t_pipe_thread_data;
@@ -295,7 +292,8 @@ int		change_height_map(t_win_data *window);
 
 //	mouse functions
 
-int		check_mouse_clicked(t_win_data *window, int x, int y, enum mouse_key key);
+int		check_mouse_clicked(t_win_data *window,
+			int x, int y, enum mouse_key key);
 int		mouse_shift(t_win_data *window, int *x_set, int *y_set);
 int		mouse_rotation(t_win_data *window);
 
@@ -390,7 +388,8 @@ int		check_colorcode(char *hex_str, char *digit);
 
 // debugging
 
-int		print_coord_data(t_win_data *window, t_coord *current, const char *color);
+int		print_coord_data(t_win_data *window,
+			t_coord *current, const char *color);
 void	print_map(int32_t ***map);
 void	print_stacks(t_win_data *window, t_coord *current);
 void	print_debug_point_1(t_win_data *window);
@@ -415,7 +414,8 @@ void	check_if_map_is_outside_window(t_win_data *window);
 
 //	zoom functions
 
-int		check_mouse_position(t_win_data *window, double *zoom_x, double *zoom_y);
+int		check_mouse_position(t_win_data *window,
+			double *zoom_x, double *zoom_y);
 void	calculate_zoom_pos(t_win_data *window);
 void	ft_scroll(double xoffset, double yoffset, void *param);
 int		zoom_calc(t_win_data *window, t_coord *cur_point);
@@ -425,15 +425,14 @@ int		zoom_calc(t_win_data *window, t_coord *cur_point);
 //	pipe_data
 
 int		create_pipe(t_win_data *window);
-int		write_data_in_buf(t_pipe_thread_data *data,
-			ssize_t *write_sz, ssize_t *bytes_written);
+int		write_data_in_buf(t_pipe_thread_data *data, ssize_t *bytes_written);
 int		write_into_pipes(t_pipe_thread_data *data);
-void kill_python_process(pid_t *python_pid);
+void	kill_python_process(pid_t *python_pid);
 
 //	threads
 
 void	*pipe_writer(void *arg);
 int		pipe_data_multithreaded(t_win_data *window);
-void	cleanup_threads(t_map_data *map_data);
+void	assign_values_to_data_struct(t_win_data *data, int i);
 
 #endif

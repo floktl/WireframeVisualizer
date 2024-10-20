@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   update_values.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 08:24:45 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/18 21:26:15 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/20 07:59:46 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,6 @@ int	update_mapsize(t_map_data *map_sz, t_coord *temp)
 	if (map_sz->maxsz_z_m > temp->zm)
 		map_sz->maxsz_z_m = temp->zm;
 	map_sz->map_area = (map_sz->maxsz_x_p - map_sz->maxsz_x_m)
-		* (map_sz->maxsz_y_m - map_sz->maxsz_y_p);
+		* (map_sz->maxsz_y_p + map_sz->maxsz_y_m);
 	return (EXIT_SUCCESS);
 }

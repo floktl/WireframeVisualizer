@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 10:14:58 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/18 21:26:15 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/20 11:57:35 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 //	thread loop to write the right data into each thread (runs simultanly)
 void	*pipe_writer(void *arg)
 {
-	t_pipe_thread_data	*data;
-	static struct timeval last_write_time = {0};
-	struct timeval		current_time;
-	long				elapsed_time;
+	t_pipe_thread_data		*data;
+	static struct timeval	last_write_time = {0};
+	struct timeval			current_time;
+	long					elapsed_time;
 
 	data = (t_pipe_thread_data *)arg;
 	if (data->pipe_index < 0 || data->pipe_index >= 4)
@@ -35,7 +35,7 @@ void	*pipe_writer(void *arg)
 			last_write_time = current_time;
 		}
 		else
-			usleep(100);
+			usleep(10000);
 	}
 	return (NULL);
 }
@@ -46,7 +46,6 @@ int	pipe_data_multithreaded(t_win_data *window)
 	int					i;
 
 	pthread_mutex_init(&window->map_sz.data_mutex, NULL);
-	window->map_sz.running = 1;
 	if (!window->thread_data)
 	{
 		perror("Failed to allocate memory for thread data");
@@ -69,10 +68,37 @@ int	pipe_data_multithreaded(t_win_data *window)
 	return (EXIT_SUCCESS);
 }
 
-//	function to stop all threads from running
-void	cleanup_threads(t_map_data *map_data)
+//	function to assign the visualize data to the data struct
+void	assign_values_to_data_struct(t_win_data *data, int i)
 {
-	pthread_mutex_lock(&map_data->data_mutex);
-	map_data->running = 0;
-	pthread_mutex_unlock(&map_data->data_mutex);
+	char	buf[12];
+
+	if (i == 0)
+	{
+		ft_memcpy(buf, &data->map_sz.xm_rot_deg, sizeof(int));
+		ft_memcpy(buf + sizeof(int), &data->map_sz.ym_rot_deg, sizeof(int));
+		ft_memcpy(buf + 2 * sizeof(int), &data->map_sz.zm_rot_deg, sizeof(int));
+	}
+	else if (i == 1)
+	{
+		ft_memcpy(buf, &data->map_sz.xposmw, sizeof(int));
+		ft_memcpy(buf + sizeof(int), &data->map_sz.yposmw, sizeof(int));
+	}
+	else if (i == 2)
+	{
+		ft_memcpy(buf, &data->mouse_posx, sizeof(int));
+		ft_memcpy(buf + sizeof(int), &data->mouse_posy, sizeof(int));
+	}
+	else if (i == 3)
+		ft_memcpy(buf, &data->map_sz.map_area, sizeof(int));
+	pthread_mutex_lock(&data->thread_data[i].data_mutex);
+	ft_memcpy(data->thread_data[i].data_buf, buf,
+		data->thread_data[i].write_size);
+	pthread_mutex_unlock(&data->thread_data[i].data_mutex);
 }
+
+
+//	function to stop all threads from running
+//void	cleanup_threads(t_map_data *map_data)
+//{
+//}

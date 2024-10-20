@@ -6,13 +6,13 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 10:58:01 by fkeitel           #+#    #+#             */
-/*   Updated: 2023/10/18 16:48:56 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/20 11:37:25 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+void	*ft_memcpy(void *dst, const void *src, ssize_t n)
 {
 	unsigned int	counter;
 	char			*char_dst;

@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:04:14 by flo               #+#    #+#             */
-/*   Updated: 2024/10/19 07:15:22 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/20 11:49:59 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
 //	function to fork the process to execute the python script and open the pipes
-int	execute_python_script(t_win_data *window)
+int	redirect_pipe_execute_python_script(t_win_data *window)
 {
 	int		i;
 
@@ -28,10 +28,10 @@ int	execute_python_script(t_win_data *window)
 		{
 			close(window->thread_data[i].pipe_fd[1]);
 			dup2(window->thread_data[i].pipe_fd[0], i + 3);
-			printf("end of Pipe %i redirected to fd %i\n", i, i + 3);
+			ft_printf("end of Pipe %i redirected to fd %i\n", i, i + 3);
 			i++;
 		}
-		ft_printf("\033[0;35m\nExecuting the Python script\n\033[0m");
+		ft_printf("\n\033[0;35mExecuting the Python script\033[0m\n");
 		execlp("python3", "python3",
 			"src/python_data/python_files/visualize_struct.py", NULL);
 		perror("execlp");
@@ -45,7 +45,6 @@ int	create_pipe(t_win_data *window)
 {
 	int		i;
 
-	i = 0;
 	window->threads = malloc(sizeof(pthread_t) * 4);
 	if (!window->threads)
 		return (perror("malloc threads"), EXIT_FAILURE);
@@ -53,82 +52,58 @@ int	create_pipe(t_win_data *window)
 	if (!window->thread_data)
 		return (perror("malloc thread_data"), EXIT_FAILURE);
 	ft_printf("\n\033[0;35mCreating pipes...\033[0m\n");
+	i = 0;
 	while (i < 4)
 	{
+		window->thread_data[i].pipe_fd[0] = -1;
+		window->thread_data[i].pipe_fd[1] = -1;
 		if (pipe(window->thread_data[i].pipe_fd) == -1)
 			return (perror("pipe"), EXIT_FAILURE);
-		printf("\033[0;34mPipe %d:\033[0m read fd = %d, write fd = %d\n",
+		ft_printf("\033[0;34mPipe %d:\033[0m read fd = %d, write fd = %d\n",
 			i, window->thread_data[i].pipe_fd[0],
 			window->thread_data[i].pipe_fd[1]);
-		window->thread_data[i].value1 = window->map_sz.xm_rot_deg;
-		window->thread_data[i].value2 = window->map_sz.ym_rot_deg;
-		window->thread_data[i].value3 = window->map_sz.zm_rot_deg;
-		window->thread_data[i].value4 = window->map_sz.xposmw;
-		i++;
+		if (i == 0)
+		{
+			window->thread_data[i++].write_size = 3 * sizeof(int);
+		}
+		else if (i == 1)
+			window->thread_data[i++].write_size = 2 * sizeof(int);
+		else if (i == 2)
+			window->thread_data[i++].write_size = 2 * sizeof(int);
+		else if (i == 3)
+			window->thread_data[i++].write_size = sizeof(int);
 	}
-	if (execute_python_script(window) == EXIT_FAILURE)
+	if (redirect_pipe_execute_python_script(window) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	i = 0;
 	while (i < 4)
-		close(window->thread_data[i++].pipe_fd[0]);
+		if (close(window->thread_data[i++].pipe_fd[0]) == -1)
+			return (perror("close read fd"), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
-//	function to write the data in a buffer
-int	write_data_in_buf(t_pipe_thread_data *data,
-	ssize_t *write_sz, ssize_t *bytes_written)
+//	function to store the data values inside buffer and write it to pipe
+int	write_data_in_buf(t_pipe_thread_data *data, ssize_t *bytes_written)
 {
-	char	buffer[12];
-
-	if (data->pipe_index == 0)
-	{
-		pthread_mutex_lock(&data->data_mutex);
-		memcpy(buffer, &data->value1, sizeof(int));
-		memcpy(buffer + sizeof(int), &data->value2, sizeof(int));
-		memcpy(buffer + 2 * sizeof(int), &data->value3, sizeof(int));
-		pthread_mutex_unlock(&data->data_mutex);
-		*write_sz = 3 * sizeof(int);
-	}
-	else if (data->pipe_index == 1)
-	{
-		pthread_mutex_lock(&data->data_mutex);
-		memcpy(buffer, &data->value1, sizeof(int));
-		memcpy(buffer + sizeof(int), &data->value2, sizeof(int));
-		pthread_mutex_unlock(&data->data_mutex);
-		*write_sz = 2 * sizeof(int);
-	}
-	else if (data->pipe_index == 2)
-	{
-		pthread_mutex_lock(&data->data_mutex);
-		memcpy(buffer, &data->value1, sizeof(int));
-		memcpy(buffer + sizeof(int), &data->value2, sizeof(int));
-		pthread_mutex_unlock(&data->data_mutex);
-		*write_sz = 2 * sizeof(int);
-	}
-	else if (data->pipe_index == 3)
-	{
-		pthread_mutex_lock(&data->data_mutex);
-		memcpy(buffer, &data->value1, sizeof(int));
-		pthread_mutex_unlock(&data->data_mutex);
-		*write_sz = sizeof(int);
-	}
-	*bytes_written = write(data->pipe_fd[1], buffer, *write_sz);
-	if (*bytes_written != *write_sz)
+	if (data->pipe_index < 0 || data->pipe_index > 3)
 		return (-1);
+	pthread_mutex_lock(&data->data_mutex);
+	*bytes_written = write(data->pipe_fd[1], data->data_buf, data->write_size);
+	if (*bytes_written != data->write_size || *bytes_written == -1)
+		return (pthread_mutex_unlock(&data->data_mutex), -1);
+	pthread_mutex_unlock(&data->data_mutex);
 	return (0);
 }
 
 //	function to write data values in the struct using a buffer
 int	write_into_pipes(t_pipe_thread_data *data)
 {
-	ssize_t	write_size;
 	ssize_t	bytes_written;
 
 	if (data->pipe_fd[1] <= 0)
 		return (fprintf(stderr, "Invalid pipe %d\n", data->pipe_fd[1]), -1);
 	bytes_written = 0;
-	write_size = 0;
-	if (write_data_in_buf(data, &write_size, &bytes_written) == -1)
+	if (write_data_in_buf(data, &bytes_written) == -1)
 	{
 		if (errno != EAGAIN && errno != EWOULDBLOCK)
 		{
@@ -136,18 +111,18 @@ int	write_into_pipes(t_pipe_thread_data *data)
 			data->pipe_fd[1] = -1;
 			return (-1);
 		}
-		if (bytes_written == -1)
+		else if (bytes_written == -1)
 			fprintf(stderr, "Write error on pipe %d: %s\n",
 				data->pipe_index, strerror(errno));
 		else
 			fprintf(stderr, "Partial write on pipe %d: %zd/%zd bytes\n",
-				data->pipe_index, bytes_written, write_size);
+				data->pipe_index, bytes_written, data->write_size);
 	}
 	return (0);
 }
 
 //	function to kill the data visualisation script before exiting the c program
-void kill_python_process(pid_t *python_pid)
+void	kill_python_process(pid_t *python_pid)
 {
 	if (*python_pid > 0)
 	{

@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_initiate.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 20:53:16 by flo               #+#    #+#             */
-/*   Updated: 2024/10/17 10:58:25 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
 //	reading the lines from the manual and assigning them in a list of images
-int	create_manual(t_window *window)
+int	create_manual(t_win_data *window)
 {
 	char	*manual_line;
 	int		fd;
@@ -43,7 +43,7 @@ int	create_manual(t_window *window)
 }
 
 //	function to set up the window and image inside the window
-int	initialize_mlx_image(t_window *window)
+int	initialize_mlx_image(t_win_data *window)
 {
 	int32_t	max_size_x;
 	int32_t	max_size_y;

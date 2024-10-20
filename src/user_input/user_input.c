@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 17:11:17 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/14 17:12:07 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //
 
 //	this function checks, if there is a change in the Z-Axis of the map
-int	check_change_height(t_window *window)
+int	check_change_height(t_win_data *window)
 {
 	static double	prev_height = ZOOM_DEFAULT;
 
@@ -31,7 +31,7 @@ int	check_change_height(t_window *window)
 }
 
 //	this function checks, if there is a change in the rotation from user input
-int	check_change_in_rotation(t_window *window)
+int	check_change_in_rotation(t_win_data *window)
 {
 	static double	prev_rot_x = ZOOM_DEFAULT;
 	static double	prev_rot_y = ZOOM_DEFAULT;

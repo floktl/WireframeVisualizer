@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window_resize_functions.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 17:45:17 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 11:36:28 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 //	this functions updates the window struct, when the window size is changed
 void	ft_resize(int width, int height, void *param)
 {
-	t_window	*window;
+	t_win_data	*window;
 
-	window = (t_window *)param;
+	window = (t_win_data *)param;
 	if (width != window->width || height != window->height)
 		mlx_resize_image(window->image, width, height);
 	else
@@ -39,7 +39,7 @@ void	ft_resize(int width, int height, void *param)
 	check_if_map_is_outside_window(window);
 }
 
-void	check_if_map_is_outside_window(t_window *window)
+void	check_if_map_is_outside_window(t_win_data *window)
 {
 	t_coord		*coord;
 

@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/09 14:58:34 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/14 17:12:00 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //
 
 //	checks if the mouse button clicked and the pointer in the image
-int	check_mouse_clicked(t_window *window, int x, int y, enum mouse_key key)
+int	check_mouse_clicked(t_win_data *window, int x, int y, enum mouse_key key)
 {
 	if (mlx_is_mouse_down(window->mlx, key))
 	{
@@ -30,7 +30,7 @@ int	check_mouse_clicked(t_window *window, int x, int y, enum mouse_key key)
 }
 
 //	calculates the shift of the map, with the left button clicked
-int	mouse_shift(t_window *window, int *x_set, int *y_set)
+int	mouse_shift(t_win_data *window, int *x_set, int *y_set)
 {
 	static int	previous_x = 0;
 	static int	previous_y = 0;
@@ -58,7 +58,7 @@ int	mouse_shift(t_window *window, int *x_set, int *y_set)
 }
 
 //	calculates the rotation of the map, with the right button clicked
-int	mouse_rotation(t_window *window)
+int	mouse_rotation(t_win_data *window)
 {
 	static int	previous_x = 0;
 	static int	previous_y = 0;

@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 12:14:49 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/14 17:10:44 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/19 06:56:30 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	free_map_coordinates(t_coord **stack)
 }
 
 //	function to reset all pixelsof the window to its default colors
-void	clear_image(t_window *window, uint32_t color)
+void	clear_image(t_win_data *window, uint32_t color)
 {
 	int	x;
 	int	y;

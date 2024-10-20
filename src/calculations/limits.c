@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 15:50:39 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/14 17:10:07 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 //	this function limits the move of the map outside the visible window
 //	Margin is the borderlimit, maxsz are the furthest 4 points seen from
 //	the center of the map
-int	range_check(t_window *window, int x, int y, int z)
+int	range_check(t_win_data *window, int x, int y, int z)
 {
 	*window = *window;
 	if (x != 0)
@@ -44,7 +44,7 @@ int	range_check(t_window *window, int x, int y, int z)
 }
 
 //	this function checks if the mouse is outside the MARGIN (window boarder)
-int	check_margin_border(t_window *window)
+int	check_margin_border(t_win_data *window)
 {
 	if (window->mouse_posx < 0 || window->mouse_posx > window->width
 		|| window->mouse_posy < 0 || window->mouse_posy > window->height)

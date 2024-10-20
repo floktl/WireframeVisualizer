@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 10:14:58 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/18 19:40:04 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/18 21:26:15 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	*pipe_writer(void *arg)
 }
 
 //	function to create detached threads for the data visualization
-int	pipe_data_multithreaded(t_window *window)
+int	pipe_data_multithreaded(t_win_data *window)
 {
 	int					i;
 
@@ -70,7 +70,7 @@ int	pipe_data_multithreaded(t_window *window)
 }
 
 //	function to stop all threads from running
-void	cleanup_threads(t_sz *map_data)
+void	cleanup_threads(t_map_data *map_data)
 {
 	pthread_mutex_lock(&map_data->data_mutex);
 	map_data->running = 0;

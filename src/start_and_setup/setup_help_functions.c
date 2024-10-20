@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 16:36:30 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/14 17:11:46 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/18 21:25:23 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@
 //
 
 //	find and sets a pointer to the last coordinate in y direction (before_y)
-void	ft_set_before_y(t_coord **head, int iterations, t_window *window)
+void	ft_set_before_y(t_coord **head, int iterations, t_win_data *data)
 {
 	t_coord	*current;
 	int		count_temp;
 	t_coord	*temp;
 
 	current = *head;
-	count_temp = iterations - window->map_sz.xm_size;
+	count_temp = iterations - data->map_sz.xm_size;
 	temp = NULL;
 	while (current != NULL && iterations >= 0)
 	{
@@ -47,7 +47,7 @@ void	ft_set_before_y(t_coord **head, int iterations, t_window *window)
 }
 
 //	find and sets a pointer to the next coordinate in y direction (next_y)
-void	ft_set_after_y(t_coord *head, t_window *window)
+void	ft_set_after_y(t_coord *head, t_win_data *data)
 {
 	t_coord	*current;
 	t_coord	*current2;
@@ -58,9 +58,9 @@ void	ft_set_after_y(t_coord *head, t_window *window)
 	{
 		counter = 0;
 		current2 = current;
-		while (current2 != NULL && counter <= window->map_sz.xm_size)
+		while (current2 != NULL && counter <= data->map_sz.xm_size)
 		{
-			if (counter == window->map_sz.xm_size)
+			if (counter == data->map_sz.xm_size)
 				current->next_y = current2;
 			current2 = current2->next;
 			counter++;
@@ -70,14 +70,14 @@ void	ft_set_after_y(t_coord *head, t_window *window)
 }
 
 //	returns the necessary iterations of coordinate to the next y value (same x)
-int	get_index(t_window *window, int pos_xm, int pos_ym)
+int	get_index(t_win_data *data, int pos_xm, int pos_ym)
 {
 	if (pos_xm < 1 || pos_ym < 1
-		|| pos_xm > window->map_sz.xm_size || pos_ym > window->map_sz.ym_size)
+		|| pos_xm > data->map_sz.xm_size || pos_ym > data->map_sz.ym_size)
 	{
 		return (ERROR);
 	}
-	return (window->map_sz.xm_size * (pos_ym) + (pos_xm - 1));
+	return (data->map_sz.xm_size * (pos_ym) + (pos_xm - 1));
 }
 
 //	this function returns a new coordinate to the map and links the 4 neighbour

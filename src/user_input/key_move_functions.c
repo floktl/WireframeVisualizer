@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/09 15:06:21 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/15 14:42:22 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //
 
 //	this function calculates the shift of the map with the arrow keys
-int	shift_map(t_window *window, int *x_set, int *y_set)
+int	shift_map(t_win_data *window, int *x_set, int *y_set)
 {
 	int			shift_speed;
 
@@ -39,7 +39,7 @@ int	shift_map(t_window *window, int *x_set, int *y_set)
 }
 
 //	this function nandles the zoom when the user presses P or M
-double	zoom_map(t_window *window)
+double	zoom_map(t_win_data *window)
 {
 	if (window->zoom != ZOOM_DEFAULT)
 		return (NO_CHANGE);
@@ -57,7 +57,7 @@ double	zoom_map(t_window *window)
 }
 
 //	function to rotate
-double	rotate_map(t_window *window)
+double	rotate_map(t_win_data *window)
 {
 	if (mlx_is_key_down(window->mlx, MLX_KEY_R)
 		&& !mlx_is_key_down(window->mlx, MLX_KEY_L))
@@ -84,7 +84,7 @@ double	rotate_map(t_window *window)
 }
 
 // function to change the z axis of the map
-int	change_height_map(t_window *window)
+int	change_height_map(t_win_data *window)
 {
 	if (mlx_is_key_down(window->mlx, MLX_KEY_Z))
 		window->map_sz.height_change += HEIGHT_FAKTOR;

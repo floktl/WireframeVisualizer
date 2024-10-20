@@ -6,14 +6,14 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 07:33:54 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/14 17:17:04 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
 //	this function resets the map settings to the default settings
-int	reset_map(t_window *window)
+int	reset_map(t_win_data *window)
 {
 	t_coord		*coord;
 	static int	key_pressed = OFF;
@@ -39,7 +39,7 @@ int	reset_map(t_window *window)
 }
 
 //	this function enables the debug mode and resets the map with the key T
-int	debug_mode_map(t_window *window)
+int	debug_mode_map(t_win_data *window)
 {
 	static int	key_pressed = OFF;
 
@@ -67,7 +67,7 @@ int	debug_mode_map(t_window *window)
 }
 
 //	function enables the manual
-int	information(t_window *window)
+int	information(t_win_data *window)
 {
 	static int	key_pressed = OFF;
 	static int	manual_status = ON;

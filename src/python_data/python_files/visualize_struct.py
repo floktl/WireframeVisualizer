@@ -3,120 +3,143 @@ import struct
 import sys
 import fcntl
 import matplotlib.pyplot as plt
+import threading
+import queue
+from threading import Lock
+import time
+from plot_handlers import PlotHandlers
 
-# Create a list for file descriptors (0-3 for 4 pipes)
-pipe_fds = [sys.stdin.fileno()] + list(range(3, 7))
+class DataPlotter:
+	def __init__(self):
+		# Initialize pipes
+		self.pipe_fds = [sys.stdin.fileno()] + list(range(3, 7))
+		self._setup_pipes()
 
-# Set pipes to non-blocking mode
-for fd in pipe_fds:
-	flags = fcntl.fcntl(fd, fcntl.F_GETFL)
-	fcntl.fcntl(fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
+		# Initialize plot
+		plt.ion()
+		self.fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+		self.axes = axes.flatten()
 
-# Prepare a single figure with subplots for each data set
-plt.ion()
-fig, axes = plt.subplots(2, 2, figsize=(10, 8))
-axes = axes.flatten()
+		# Data storage
+		self.data = [[] for _ in range(4)]
+		self.rotation_data = {'x': [], 'y': [], 'z': []}
+		self.buffer_sizes = {1: 12, 2: 8, 3: 8, 4: 4}
 
-# Initialize data for each plot
-data = [[] for _ in range(4)]
-rotation_data = {'x': [], 'y': [], 'z': []}
-pipe1_buffer = b''
-pipe2_buffer = b''
+		# Thread safety
+		self.plot_locks = [Lock() for _ in range(4)]
+		self.data_queues = [queue.Queue() for _ in range(4)]
+		self.exit_program = False
 
-# Flag to indicate when to exit
-exit_program = False
+		# Connect event handler
+		self.fig.canvas.mpl_connect('key_press_event', self._on_key)
 
-# Function to update the plot for rotation
-def update_rotation_plot(x_rot, y_rot, z_rot):
-	ax = axes[0]  # Graph for rotations
-	ax.clear()
-	rotation_data['x'].append(x_rot)
-	rotation_data['y'].append(y_rot)
-	rotation_data['z'].append(z_rot)
+		# Create threads
+		self.threads = []
+		for i in range(1, 5):
+			thread = threading.Thread(target=self._pipe_thread, args=(i,))
+			thread.daemon = True
+			self.threads.append(thread)
 
-	ax.plot(rotation_data['x'], label='X Rotation', color='r')
-	ax.plot(rotation_data['y'], label='Y Rotation', color='g')
-	ax.plot(rotation_data['z'], label='Z Rotation', color='b')
+	def _setup_pipes(self):
+		"""Set up non-blocking pipes"""
+		for fd in self.pipe_fds:
+			flags = fcntl.fcntl(fd, fcntl.F_GETFL)
+			fcntl.fcntl(fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
-	# Set labels and legend
-	ax.set_title('Rotation Data for Pipe 1')
-	ax.set_xlabel('Time')
-	ax.set_ylabel('Degrees')
-	ax.legend()
-	ax.grid(True)
+	def update_rotation_plot(self, x_rot, y_rot, z_rot):
+		"""Update rotation data plot (Pipe 1)"""
+		with self.plot_locks[0]:
+			self.rotation_data['x'].append(x_rot)
+			self.rotation_data['y'].append(y_rot)
+			self.rotation_data['z'].append(z_rot)
+			PlotHandlers.update_rotation_plot(self.axes[0], self.rotation_data)
 
-# Function to update the plot for the other pipes
-def update_plot(x, y):
-	ax = axes[1]  # Adjust index as necessary
-	ax.clear()
-	data[1].append((x, y))
+	def update_position_plot(self, x, y, index, title):
+		"""Update position plots (Pipe 2 and 3)"""
+		with self.plot_locks[index]:
+			self.data[index].append((x, y))
+			PlotHandlers.update_position_plot(self.axes[index], self.data[index], title)
 
-	# Set limits and labels
-	ax.set_xlim(-512, 512)
-	ax.set_ylim(-512, 512)
-	ax.axhline(0, color='black', linewidth=0.5, ls='--')
-	ax.axvline(0, color='black', linewidth=0.5, ls='--')
-	ax.grid(color='gray', linestyle='--', linewidth=0.5)
+	def update_area_plot(self, area, index):
+		"""Update area plot (Pipe 4)"""
+		with self.plot_locks[index]:
+			PlotHandlers.update_area_plot(self.axes[index], area)
 
-	# Unzip data points and plot
-	if data[1]:
-		x_data, y_data = zip(*data[1])
-		ax.plot(x_data, y_data, marker='o')
-	ax.set_title(f'Map middle position for Pipe 2')
+	def _pipe_thread(self, pipe_num):
+		"""Thread function for reading from a pipe"""
+		buffer = b''
+		buffer_size = self.buffer_sizes[pipe_num]
 
-# Event handler for key press
-def on_key(event):
-	global exit_program
-	if event.key == 'escape':
-		exit_program = True  # Set the exit flag
-		plt.close(fig)
-		print("Escape key pressed. Exiting program.")
+		while not self.exit_program:
+			try:
+				# Read from pipe
+				line = os.read(self.pipe_fds[pipe_num], buffer_size - len(buffer))
+				if line:
+					buffer += line
+					if len(buffer) == buffer_size:
+						# Process complete buffer
+						self.data_queues[pipe_num - 1].put(buffer)
+						buffer = b''
+			except BlockingIOError:
+				time.sleep(0.001)  # Small sleep to prevent CPU hogging
+			except Exception as e:
+				print(f"Error in pipe {pipe_num}: {e}")
 
-# Connect the key press event to the handler
-fig.canvas.mpl_connect('key_press_event', on_key)
+	def _process_queue_data(self):
+		"""Process data from all queues"""
+		for pipe_num in range(1, 5):
+			queue_idx = pipe_num - 1
+			while not self.data_queues[queue_idx].empty():
+				buffer_data = self.data_queues[queue_idx].get()
 
-# Read from the pipes
-try:
-	print("\nPython: Plot initialized")
-	while not exit_program:
-		for i in range(4):
-			if i == 1:
-				try:
-					line = os.read(pipe_fds[i], 12 - len(pipe2_buffer))
-					if line:
-						pipe2_buffer += line
-						if len(pipe2_buffer) == 12:
-							x_rot, y_rot, z_rot = struct.unpack('iii', pipe2_buffer)
-							update_rotation_plot(x_rot, y_rot, z_rot)
-							pipe2_buffer = b''
-					else:
-						break
-				except BlockingIOError:
-					continue
+				if pipe_num == 1:  # Rotation data
+					x_rot, y_rot, z_rot = struct.unpack('iii', buffer_data)
+					self.update_rotation_plot(x_rot, y_rot, z_rot)
 
-			elif i == 2:
-				try:
-					line = os.read(pipe_fds[i], 8 - len(pipe1_buffer))
-					if line:
-						pipe1_buffer += line
-						if len(pipe1_buffer) == 8:
-							xposmw, yposmw = struct.unpack('ii', pipe1_buffer)
-							xpos_adjusted = xposmw - 512
-							ypos_adjusted = 512 - yposmw
-							update_plot(xpos_adjusted, ypos_adjusted)
-							pipe1_buffer = b''
-					else:
-						break
-				except BlockingIOError:
-					continue
+				elif pipe_num in [2, 3]:  # Position data
+					x_pos, y_pos = struct.unpack('ii', buffer_data)
+					x_adjusted = x_pos - 512
+					y_adjusted = 512 - y_pos
+					title = 'Map Middle Position' if pipe_num == 2 else 'Mouse Position'
+					self.update_position_plot(x_adjusted, y_adjusted, pipe_num - 1, title)
 
-		plt.pause(0.0001)
+				elif pipe_num == 4:  # Area data
+					area_value = struct.unpack('i', buffer_data)[0]
+					self.update_area_plot(area_value, pipe_num - 1)
 
-except KeyboardInterrupt:
-	print("Exiting due to keyboard interrupt.")
+	def _on_key(self, event):
+		"""Handle key press events"""
+		if event.key == 'escape':
+			self.exit_program = True
+			plt.close(self.fig)
+			print("Escape key pressed. Exiting program.")
 
-finally:
-	plt.close(fig)
-	sys.exit(0)
+	def run(self):
+		"""Main loop"""
+		try:
+			print("\nPython: Plot initialized")
 
-# multithreading and better response time missing
+			# Start all threads
+			for thread in self.threads:
+				thread.start()
+
+			# Main loop for updating plots
+			while not self.exit_program:
+				self._process_queue_data()
+				plt.pause(0.001)  # Slightly longer pause for better performance
+
+		except KeyboardInterrupt:
+			print("Exiting due to keyboard interrupt.")
+			self.exit_program = True
+
+		finally:
+			self.exit_program = True
+			# Wait for all threads to finish
+			for thread in self.threads:
+				thread.join(timeout=1.0)
+			plt.close(self.fig)
+			sys.exit(0)
+
+if __name__ == "__main__":
+	plotter = DataPlotter()
+	plotter.run()

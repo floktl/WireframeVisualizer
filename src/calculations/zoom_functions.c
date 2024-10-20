@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   zoom_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 17:02:49 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/17 10:44:19 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 //	this functions calculates the zoom direction of the map center depending
 //	on the mous position
-int	check_mouse_position(t_window *window, double *zoom_x, double *zoom_y)
+int	check_mouse_position(t_win_data *window, double *zoom_x, double *zoom_y)
 {
 	double	zoom_direction_x;
 	double	zoom_direction_y;
@@ -37,7 +37,7 @@ int	check_mouse_position(t_window *window, double *zoom_x, double *zoom_y)
 }
 
 //	calculate the zoom based on the mouse position
-void	calculate_zoom_pos(t_window *window)
+void	calculate_zoom_pos(t_win_data *window)
 {
 	double	zoom_x;
 	double	zoom_y;
@@ -63,9 +63,9 @@ void	calculate_zoom_pos(t_window *window)
 //	this functions calclulates the zoom with the scroll wheel or trackpad
 void	ft_scroll(double xoffset, double yoffset, void *param)
 {
-	t_window	*window;
+	t_win_data	*window;
 
-	window = (t_window *)param;
+	window = (t_win_data *)param;
 	if (window->zoom != ZOOM_DEFAULT && xoffset)
 		return ;
 	if (yoffset < 0)
@@ -82,7 +82,7 @@ void	ft_scroll(double xoffset, double yoffset, void *param)
 
 //	this function calculates the zoom in x and y direction of each coordinate,
 //	depending on the mouse and/or map position
-int	zoom_calc(t_window *window, t_coord *cur_point)
+int	zoom_calc(t_win_data *window, t_coord *cur_point)
 {
 	if (window->zoom == ZOOM_DEFAULT)
 		return (NO_CHANGE);

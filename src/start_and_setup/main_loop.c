@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 09:45:33 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/18 20:52:24 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/19 07:14:09 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //
 
 //	function to update the thread struct with the current data changes
-void	update_thread_struct(t_window *window)
+void	update_thread_struct(t_win_data *window)
 {
 	static struct timeval	last_write_time = {0};
 	struct timeval	current_time;
@@ -32,13 +32,34 @@ void	update_thread_struct(t_window *window)
 		i = 0;
 		while (i < 4)
 		{
-			pthread_mutex_lock(&window->thread_data[i].data_mutex);
-			window->thread_data[i].xposmw = window->mouse_posx;
-			window->thread_data[i].yposmw = window->mouse_posy;
-			window->thread_data[i].rot_x = window->map_sz.xm_rot_deg;
-			window->thread_data[i].rot_y = window->map_sz.ym_rot_deg;
-			window->thread_data[i].rot_z = window->map_sz.zm_rot_deg;
-			pthread_mutex_unlock(&window->thread_data[i++].data_mutex);
+			if (i == 0)
+			{
+				pthread_mutex_lock(&window->thread_data[i].data_mutex);
+				window->thread_data[i].value1 = window->map_sz.xm_rot_deg;
+				window->thread_data[i].value2 = window->map_sz.ym_rot_deg;
+				window->thread_data[i].value3 = window->map_sz.zm_rot_deg;
+				pthread_mutex_unlock(&window->thread_data[i++].data_mutex);
+			}
+			else if (i == 1)
+			{
+				pthread_mutex_lock(&window->thread_data[i].data_mutex);
+				window->thread_data[i].value1 = window->map_sz.xposmw;
+				window->thread_data[i].value2 = window->map_sz.yposmw;
+				pthread_mutex_unlock(&window->thread_data[i++].data_mutex);
+			}
+			else if (i == 2)
+			{
+				pthread_mutex_lock(&window->thread_data[i].data_mutex);
+				window->thread_data[i].value1 = window->mouse_posx;
+				window->thread_data[i].value2 = window->mouse_posy;
+				pthread_mutex_unlock(&window->thread_data[i++].data_mutex);
+			}
+			else if (i == 3)
+			{
+				pthread_mutex_lock(&window->thread_data[i].data_mutex);
+				window->thread_data[i].value1 = window->map_sz.map_area;
+				pthread_mutex_unlock(&window->thread_data[i++].data_mutex);
+			}
 		}
 		last_write_time = current_time;
 	}
@@ -47,14 +68,14 @@ void	update_thread_struct(t_window *window)
 // fills the window with the map rendered in 3D functionality
 void	ft_render(void *param)
 {
-	t_window	*window;
+	t_win_data	*window;
 	t_coord		*current;
 	int			x_offset;
 	int			y_offset;
 
 	x_offset = 0;
 	y_offset = 0;
-	window = (t_window *)param;
+	window = (t_win_data *)param;
 	(void)window;
 	mlx_get_mouse_pos(window->mlx, &window->mouse_posx, &window->mouse_posy);
 	check_margin_border(window);
@@ -79,7 +100,7 @@ void	ft_render(void *param)
 //	P: Zoom in M: Zoom out
 //	R + arrow keys: rotate map in x and y direction
 //	D: Debug mode with terminal value view option and map center visualization
-int	ft_hook_key(t_window *window, int *x_offset, int *y_offset)
+int	ft_hook_key(t_win_data *window, int *x_offset, int *y_offset)
 {
 	if (mlx_is_key_down(window->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(window->mlx);

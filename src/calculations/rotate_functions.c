@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rotate_functions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:32:30 by flo               #+#    #+#             */
-/*   Updated: 2024/10/17 10:46:15 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //
 
 //	function to calculate the points on each rotation axis
-void	rotate(double *a, double *b, t_window window, char axis)
+void	rotate(double *a, double *b, t_win_data window, char axis)
 {
 	double	rad;
 	double	new_a;
@@ -46,7 +46,7 @@ void	rotate(double *a, double *b, t_window window, char axis)
 }
 
 //	function to calculate the rotations after a user input
-int	rotation_calc(t_window *window, t_coord *cur_point)
+int	rotation_calc(t_win_data *window, t_coord *cur_point)
 {
 	double	temp_xm;
 	double	temp_ym;

@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 07:33:01 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 05:49:13 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/18 21:26:15 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 //----------------------------- window struct ----------------------------------
 
 //	sets the default settings for the window
-int	set_default_window_data(t_window *window)
+int	set_default_window_data(t_win_data *window)
 {
 	if (!window)
 		return (perror("Error setting default window data"), EXIT_FAILURE);
@@ -42,7 +42,7 @@ int	set_default_window_data(t_window *window)
 //-------------------------------- map structs ---------------------------------
 
 //	sets the default settings for the map after start-up
-int	map_size_default_setting(t_sz *map_sz, t_sz size)
+int	map_size_default_setting(t_map_data *map_sz, t_map_data size)
 {
 	map_sz->xposmw = WIDTH / 2;
 	map_sz->yposmw = HEIGHT / 2;
@@ -64,7 +64,7 @@ int	map_size_default_setting(t_sz *map_sz, t_sz size)
 //------------------------------ coord structs --------------------------------
 
 // this function set all important variables into struct to each point in a loop
-int32_t	set_coord(t_window *window)
+int32_t	set_coord(t_win_data *window)
 {
 	t_coord	*coord;
 	int		x_axis;
@@ -92,7 +92,7 @@ int32_t	set_coord(t_window *window)
 }
 
 //	assign the position of the points on the map and the middle of the window
-int	assign_coord_position(t_window *window, t_coord *coord, int x, int y)
+int	assign_coord_position(t_win_data *window, t_coord *coord, int x, int y)
 {
 	double	round_x;
 	double	round_y;
@@ -121,7 +121,7 @@ int	assign_coord_position(t_window *window, t_coord *coord, int x, int y)
 //	assign the color to each coordinate, checks if htere is already a color
 //	in the map given, if not, it sets the default color,depending on the value
 //	of the z-axis
-int	assign_color(t_window *window, t_coord *coord, int x, int y)
+int	assign_color(t_win_data *window, t_coord *coord, int x, int y)
 {
 	if (window->map[y][x][COLOR] >= INT32_MIN
 		&& window->map[y][x][COLOR] <= INT32_MAX)

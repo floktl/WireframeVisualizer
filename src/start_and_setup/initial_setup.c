@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:28:34 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/14 17:11:30 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/18 21:26:15 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 //	function to read the map from the argument and process the data
 //	map can be either inside project folder or within the test_maps
-int	initialize_window_from_args(t_window *window, char *argv[])
+int	initialize_window_from_args(t_win_data *window, char *argv[])
 {
 	char	*file_path;
 	int		fd;
@@ -125,10 +125,10 @@ int	assign_map_values(int32_t ***map_x_axis, char **collumn, int line)
 
 //	this function assigns all variable values of the map, which will change, but
 //	only for the whole map at once, not every unique coordinate
-int	get_map_size(t_window *window)
+int	get_map_size(t_win_data *window)
 {
-	t_sz		size;
-	t_window	*temp;
+	t_map_data		size;
+	t_win_data	*temp;
 
 	size.ym_size = 0;
 	temp = window;

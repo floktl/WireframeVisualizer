@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   help_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:28:26 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/17 10:45:15 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int32_t	ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
 
 //	assigns  the highest and lowest value of the map (z_direction) as well
 //	as the the distance to the map middlepoint in z direction
-int	find_highest_and_lowest(t_window *map)
+int	find_highest_and_lowest(t_win_data *map)
 {
 	int			x;
 	int			y;

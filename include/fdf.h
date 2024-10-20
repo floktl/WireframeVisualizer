@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:26:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/18 20:32:50 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/19 18:11:43 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ typedef struct s_arr_size
 	int		map_area;
 	pthread_mutex_t	data_mutex;
 	int		running;
-}	t_sz;
+}	t_map_data;
 
 //	struct for images for the manual, independent from the map
 typedef struct s_manual
@@ -208,7 +208,7 @@ typedef struct s_window
 	int			height;
 	void		*win;
 	int32_t		***map;
-	t_sz		map_sz;
+	t_map_data		map_sz;
 	t_coord		*coord;
 	int			cent_xw;
 	int			cent_yw;
@@ -226,20 +226,19 @@ typedef struct s_window
 	pid_t		python_pid;
 	t_pipe_thread_data	*thread_data;
 	pthread_t			*threads;
-}	t_window;
+}	t_win_data;
 
 typedef struct s_pipe_thread_data
 {
-	int				xposmw;
-	int				yposmw;
-	int				rot_x;
-	int				rot_y;
-	int				rot_z;
+	int				value1;
+	int				value2;
+	int				value3;
+	int				value4;
 	int				pipe_index;
 	int				pipe_fd[2];
 	pthread_mutex_t	data_mutex;
 }	t_pipe_thread_data;
-
+//
 /*
 --------------------------------- functions ------------------------------------
 */
@@ -248,27 +247,26 @@ typedef struct s_pipe_thread_data
 
 //	assigning values
 
-int		set_default_window_data(t_window *window);
-int		map_size_default_setting(t_sz *map_sz, t_sz size);
-int32_t	set_coord(t_window *window);
-int		assign_coord_position(t_window *window, t_coord *coord, int x, int y);
-int		assign_color(t_window *window, t_coord *coord, int x, int y);
+int		set_default_window_data(t_win_data *window);
+int		map_size_default_setting(t_map_data *map_sz, t_map_data size);
+int32_t	set_coord(t_win_data *window);
+int		assign_coord_position(t_win_data *window, t_coord *coord, int x, int y);
+int		assign_color(t_win_data *window, t_coord *coord, int x, int y);
 
 //	initial setup
 
-int		initialize_window_from_args(t_window *window, char *argv[]);
+int		initialize_window_from_args(t_win_data *window, char *argv[]);
 int		assign_map_values(int32_t ***map, char **collumn, int line);
-int		get_map_size(t_window *window);
+int		get_map_size(t_win_data *window);
 
 //	main loop
 
 void	ft_render(void *param);
-int		ft_hook_key(t_window *window, int *x_offset, int *y_offset);
+int		ft_hook_key(t_win_data *window, int *x_offset, int *y_offset);
 
 //	mlx initiate
-
-int		create_manual(t_window *window);
-int		initialize_mlx_image(t_window *window);
+int		create_manual(t_win_data *window);
+int		initialize_mlx_image(t_win_data *window);
 
 //	reading_map
 
@@ -280,9 +278,9 @@ void	delete_spaces(int *collumn_counter, char ***collumn);
 
 //	setup help functions
 
-void	ft_set_before_y(t_coord **head, int iterations, t_window *window);
-void	ft_set_after_y(t_coord *head, t_window *window);
-int		get_index(t_window *window, int pos_xm, int pos_ym);
+void	ft_set_before_y(t_coord **head, int iterations, t_win_data *window);
+void	ft_set_after_y(t_coord *head, t_win_data *window);
+int		get_index(t_win_data *window, int pos_xm, int pos_ym);
 int32_t	link_add_pt(t_coord **coord, int x, int y);
 void	lstadd_back(t_man **lst, t_man *new);
 
@@ -290,34 +288,34 @@ void	lstadd_back(t_man **lst, t_man *new);
 
 //	key functions
 
-int		shift_map(t_window *window, int *x_set, int *y_set);
-double	zoom_map(t_window *window);
-double	rotate_map(t_window *window);
-int		change_height_map(t_window *window);
+int		shift_map(t_win_data *window, int *x_set, int *y_set);
+double	zoom_map(t_win_data *window);
+double	rotate_map(t_win_data *window);
+int		change_height_map(t_win_data *window);
 
 //	mouse functions
 
-int		check_mouse_clicked(t_window *window, int x, int y, enum mouse_key key);
-int		mouse_shift(t_window *window, int *x_set, int *y_set);
-int		mouse_rotation(t_window *window);
+int		check_mouse_clicked(t_win_data *window, int x, int y, enum mouse_key key);
+int		mouse_shift(t_win_data *window, int *x_set, int *y_set);
+int		mouse_rotation(t_win_data *window);
 
 //	user input
 
-int		check_change_height(t_window *window);
-int		check_change_in_rotation(t_window *window);
+int		check_change_height(t_win_data *window);
+int		check_change_in_rotation(t_win_data *window);
 
 //	key additional functions
 
-int		reset_map(t_window *window);
-int		debug_mode_map(t_window *window);
+int		reset_map(t_win_data *window);
+int		debug_mode_map(t_win_data *window);
 
-int		information(t_window *window);
+int		information(t_win_data *window);
 
 //	user input helpers
 
-void	remove_manual_from_window(t_window *window);
-void	set_map_to_middle(t_window *window);
-void	print_manual(t_window *window);
+void	remove_manual_from_window(t_win_data *window);
+void	set_map_to_middle(t_win_data *window);
+void	print_manual(t_win_data *window);
 
 //--------------------------------- rendering ----------------------------------
 
@@ -325,14 +323,14 @@ void	print_manual(t_window *window);
 
 int		check_error_pixel(t_coord *pt_a, t_coord *pt_b, int *x0, int *y0);
 int32_t	find_color(int32_t color_a, int32_t color_b, float t);
-void	connect_points(t_window *window, t_coord *point_a, t_coord *point_b);
+void	connect_points(t_win_data *window, t_coord *point_a, t_coord *point_b);
 
 //	update values
 
-int32_t	update_coord(t_window *window, int x_offset, int y_offset);
-int		calculate_height_change(t_window *window);
-void	reset_map_size(t_window *window);
-int		update_mapsize(t_sz *map_sz, t_coord *temp);
+int32_t	update_coord(t_win_data *window, int x_offset, int y_offset);
+int		calculate_height_change(t_win_data *window);
+void	reset_map_size(t_win_data *window);
+int		update_mapsize(t_map_data *map_sz, t_coord *temp);
 
 //--------------------------------- mathematics --------------------------------
 
@@ -362,7 +360,7 @@ void	degree(int *rot);
 //	clear functions
 
 void	free_map_coordinates(t_coord **stack);
-void	clear_image(t_window *window, uint32_t color);
+void	clear_image(t_win_data *window, uint32_t color);
 void	free_map(int32_t ***map);
 int32_t	***free_map_data(int32_t ***map, char **collumn, int row);
 void	free_manual(t_man **stack);
@@ -370,7 +368,7 @@ void	free_manual(t_man **stack);
 //	help functions
 
 int32_t	ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a);
-int		find_highest_and_lowest(t_window *map);
+int		find_highest_and_lowest(t_win_data *map);
 double	check_zoom_direction(int map_middle, int zoom_position, double zoom);
 int32_t	convert_str_to_hex(char *comma_pos);
 
@@ -392,41 +390,41 @@ int		check_colorcode(char *hex_str, char *digit);
 
 // debugging
 
-int		print_coord_data(t_window *window, t_coord *current, const char *color);
+int		print_coord_data(t_win_data *window, t_coord *current, const char *color);
 void	print_map(int32_t ***map);
-void	print_stacks(t_window *window, t_coord *current);
-void	print_debug_point_1(t_window *window);
-void	print_debug_point_2(t_window *window);
+void	print_stacks(t_win_data *window, t_coord *current);
+void	print_debug_point_1(t_win_data *window);
+void	print_debug_point_2(t_win_data *window);
 
 //------------------------------- calculations ---------------------------------
 
 //	limits
 
-int		range_check(t_window *window, int x, int y, int z);
-int		check_margin_border(t_window *window);
+int		range_check(t_win_data *window, int x, int y, int z);
+int		check_margin_border(t_win_data *window);
 
 //	rotate functions
 
-void	rotate(double *a, double *b, t_window window, char axis);
-int		rotation_calc(t_window *window, t_coord *cur_point);
+void	rotate(double *a, double *b, t_win_data window, char axis);
+int		rotation_calc(t_win_data *window, t_coord *cur_point);
 
 //	window resize functions
 
 void	ft_resize(int width, int height, void *param);
-void	check_if_map_is_outside_window(t_window *window);
+void	check_if_map_is_outside_window(t_win_data *window);
 
 //	zoom functions
 
-int		check_mouse_position(t_window *window, double *zoom_x, double *zoom_y);
-void	calculate_zoom_pos(t_window *window);
+int		check_mouse_position(t_win_data *window, double *zoom_x, double *zoom_y);
+void	calculate_zoom_pos(t_win_data *window);
 void	ft_scroll(double xoffset, double yoffset, void *param);
-int		zoom_calc(t_window *window, t_coord *cur_point);
+int		zoom_calc(t_win_data *window, t_coord *cur_point);
 
 //------------------------------ python data --------------------------------
 
 //	pipe_data
 
-int		create_pipe(t_window *window);
+int		create_pipe(t_win_data *window);
 int		write_data_in_buf(t_pipe_thread_data *data,
 			ssize_t *write_sz, ssize_t *bytes_written);
 int		write_into_pipes(t_pipe_thread_data *data);
@@ -435,7 +433,7 @@ void kill_python_process(pid_t *python_pid);
 //	threads
 
 void	*pipe_writer(void *arg);
-int		pipe_data_multithreaded(t_window *window);
-void	cleanup_threads(t_sz *map_data);
+int		pipe_data_multithreaded(t_win_data *window);
+void	cleanup_threads(t_map_data *map_data);
 
 #endif

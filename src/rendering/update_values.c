@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 08:24:45 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 17:31:41 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/18 21:26:15 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //
 
 //this function updates all important variables to each point in map
-int32_t	update_coord(t_window *window, int x_offset, int y_offset)
+int32_t	update_coord(t_win_data *window, int x_offset, int y_offset)
 {
 	t_coord		*temp;
 
@@ -46,7 +46,7 @@ int32_t	update_coord(t_window *window, int x_offset, int y_offset)
 }
 
 // function to calculate the max and min change of the z_axis of the map
-int	calculate_height_change(t_window *window)
+int	calculate_height_change(t_win_data *window)
 {
 	int	z_size;
 
@@ -65,7 +65,7 @@ int	calculate_height_change(t_window *window)
 }
 
 //	function to set the map size to the default values
-void	reset_map_size(t_window *window)
+void	reset_map_size(t_win_data *window)
 {
 	window->map_sz.maxsz_x_p = window->map_sz.xposmw;
 	window->map_sz.maxsz_x_m = window->map_sz.xposmw;
@@ -76,7 +76,7 @@ void	reset_map_size(t_window *window)
 }
 
 //	update the furthest points of the map from the map center
-int	update_mapsize(t_sz *map_sz, t_coord *temp)
+int	update_mapsize(t_map_data *map_sz, t_coord *temp)
 {
 	if ((map_sz->maxsz_x_p) < temp->xw)
 		map_sz->maxsz_x_p = temp->xw;

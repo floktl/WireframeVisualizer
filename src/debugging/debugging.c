@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debugging.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 13:25:40 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/16 11:30:00 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #define COLOR_RESET   "\x1b[0m"
 
 //	printing the coordinates and other useful data of each point
-int	print_coord_data(t_window *window, t_coord *current, const char *color)
+int	print_coord_data(t_win_data *window, t_coord *current, const char *color)
 {
 	*window = *window;
 	ft_printf("%s", color);
@@ -75,7 +75,7 @@ void	print_map(int32_t ***map)
 }
 
 //	prints the values of all coordinates (distances, color, degree, position...)
-void	print_stacks(t_window *window, t_coord *current)
+void	print_stacks(t_win_data *window, t_coord *current)
 {
 	const char	*color;
 	int			row_number;
@@ -97,7 +97,7 @@ void	print_stacks(t_window *window, t_coord *current)
 }
 
 //	printing a line between two points, which can used for debugging
-void	print_debug_point_1(t_window *window)
+void	print_debug_point_1(t_win_data *window)
 {
 	if (window->debug_mode == OFF)
 		return ;
@@ -113,7 +113,7 @@ void	print_debug_point_1(t_window *window)
 }
 
 //	printing a line between two points, which can used for debugging
-void	print_debug_point_2(t_window *window)
+void	print_debug_point_2(t_win_data *window)
 {
 	if (window->debug_mode == OFF)
 		return ;

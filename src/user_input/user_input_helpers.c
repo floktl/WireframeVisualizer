@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   user_input_helpers.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 16:21:26 by flo               #+#    #+#             */
-/*   Updated: 2024/10/16 11:37:26 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
 //	function to remove the manual from the window and replace it
-void	remove_manual_from_window(t_window *window)
+void	remove_manual_from_window(t_win_data *window)
 {
 	t_man		*initial_manual;
 
@@ -28,7 +28,7 @@ void	remove_manual_from_window(t_window *window)
 }
 
 //	this function sets the map to the middle of the window
-void	set_map_to_middle(t_window *window)
+void	set_map_to_middle(t_win_data *window)
 {
 	window->map_sz.xposmw = window->width / 2;
 	window->map_sz.yposmw = window->height / 2;
@@ -39,7 +39,7 @@ void	set_map_to_middle(t_window *window)
 }
 
 // function to print the manual given as a txt.file to the window
-void	print_manual(t_window *window)
+void	print_manual(t_win_data *window)
 {
 	int		y;
 	int		distance;

@@ -6,14 +6,14 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:04:14 by flo               #+#    #+#             */
-/*   Updated: 2024/10/18 21:03:31 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/19 07:15:22 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
 //	function to fork the process to execute the python script and open the pipes
-int	execute_python_script(t_window *window)
+int	execute_python_script(t_win_data *window)
 {
 	int		i;
 
@@ -41,7 +41,7 @@ int	execute_python_script(t_window *window)
 }
 
 // function to create the pipes and start the Python script for visual data
-int	create_pipe(t_window *window)
+int	create_pipe(t_win_data *window)
 {
 	int		i;
 
@@ -60,11 +60,10 @@ int	create_pipe(t_window *window)
 		printf("\033[0;34mPipe %d:\033[0m read fd = %d, write fd = %d\n",
 			i, window->thread_data[i].pipe_fd[0],
 			window->thread_data[i].pipe_fd[1]);
-		window->thread_data[i].rot_x = window->map_sz.xm_rot_deg;
-		window->thread_data[i].rot_y = window->map_sz.ym_rot_deg;
-		window->thread_data[i].rot_z = window->map_sz.zm_rot_deg;
-		window->thread_data[i].xposmw = window->map_sz.xposmw;
-		window->thread_data[i].yposmw = window->map_sz.yposmw;
+		window->thread_data[i].value1 = window->map_sz.xm_rot_deg;
+		window->thread_data[i].value2 = window->map_sz.ym_rot_deg;
+		window->thread_data[i].value3 = window->map_sz.zm_rot_deg;
+		window->thread_data[i].value4 = window->map_sz.xposmw;
 		i++;
 	}
 	if (execute_python_script(window) == EXIT_FAILURE)
@@ -81,26 +80,38 @@ int	write_data_in_buf(t_pipe_thread_data *data,
 {
 	char	buffer[12];
 
-	int z;
-	z = 0;
 	if (data->pipe_index == 0)
 	{
 		pthread_mutex_lock(&data->data_mutex);
-		memcpy(buffer, &data->rot_x, sizeof(int));
-		memcpy(buffer + sizeof(int), &data->rot_y, sizeof(int));
-		memcpy(buffer + 2 * sizeof(int), &data->rot_z, sizeof(int));
+		memcpy(buffer, &data->value1, sizeof(int));
+		memcpy(buffer + sizeof(int), &data->value2, sizeof(int));
+		memcpy(buffer + 2 * sizeof(int), &data->value3, sizeof(int));
 		pthread_mutex_unlock(&data->data_mutex);
 		*write_sz = 3 * sizeof(int);
 	}
 	else if (data->pipe_index == 1)
 	{
 		pthread_mutex_lock(&data->data_mutex);
-		memcpy(buffer, &data->xposmw, sizeof(int));
-		memcpy(buffer + sizeof(int), &data->yposmw, sizeof(int));
+		memcpy(buffer, &data->value1, sizeof(int));
+		memcpy(buffer + sizeof(int), &data->value2, sizeof(int));
 		pthread_mutex_unlock(&data->data_mutex);
 		*write_sz = 2 * sizeof(int);
 	}
-	(void)z;
+	else if (data->pipe_index == 2)
+	{
+		pthread_mutex_lock(&data->data_mutex);
+		memcpy(buffer, &data->value1, sizeof(int));
+		memcpy(buffer + sizeof(int), &data->value2, sizeof(int));
+		pthread_mutex_unlock(&data->data_mutex);
+		*write_sz = 2 * sizeof(int);
+	}
+	else if (data->pipe_index == 3)
+	{
+		pthread_mutex_lock(&data->data_mutex);
+		memcpy(buffer, &data->value1, sizeof(int));
+		pthread_mutex_unlock(&data->data_mutex);
+		*write_sz = sizeof(int);
+	}
 	*bytes_written = write(data->pipe_fd[1], buffer, *write_sz);
 	if (*bytes_written != *write_sz)
 		return (-1);

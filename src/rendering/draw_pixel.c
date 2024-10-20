@@ -6,7 +6,7 @@
 /*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 18:39:28 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/14 17:09:55 by flo              ###   ########.fr       */
+/*   Updated: 2024/10/18 21:24:00 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int32_t	find_color(int32_t color_a, int32_t color_b, float t)
 //	((Px - Ax)(By - Ay) - (Py -Ay)(Bx - Ax)) == 0 (A = cur, B = next)
 //	then a check if point is between the points A and B
 //	laslty calculate the z axis of P with , and dislpay it
-void	connect_points(t_window *window, t_coord *point_a, t_coord *point_b)
+void	connect_points(t_win_data *window, t_coord *point_a, t_coord *point_b)
 {
 	float	z;
 	int		x0;

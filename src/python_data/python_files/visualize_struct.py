@@ -130,7 +130,7 @@ class DataPlotter:
 			# Main loop for updating plots
 			while not self.exit_program:
 				self._process_queue_data()
-				plt.pause(0.1)  # Slightly longer pause for better performance
+				plt.pause(0.1)
 
 		except KeyboardInterrupt:
 			print("Exiting due to keyboard interrupt.")

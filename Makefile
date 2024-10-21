@@ -6,7 +6,7 @@
 #    By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/12 14:13:59 by fkeitel           #+#    #+#              #
-#    Updated: 2024/10/20 12:06:40 by fkeitel          ###   ########.fr        #
+#    Updated: 2024/10/21 10:24:23 by fkeitel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ CFLAGS  := -Wunreachable-code -Ofast -Wall -Werror -Wextra -g -fsanitize=address
 MLX_FLAGS := -L./MLX42/build -lmlx42 -I../MLX42/include -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
 # Flag for memory leak detection, adjust the path to your own path
-#LEAKFLAG := -L/Users/fkeitel/LeakSanitizer  -llsan
+#LEAKFLAG := -L/Users/fkeitel/Documents/LeakSanitizer  -llsan
 
 # Directories
 SRC_DIR := src

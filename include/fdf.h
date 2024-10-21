@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:26:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/20 11:58:12 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/21 07:40:31 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,6 @@ typedef struct s_arr_size
 	int32_t			color_plus;
 	int32_t			color_minus;
 	int				map_area;
-	pthread_mutex_t	data_mutex;
 }	t_map_data;
 
 //	struct for images for the manual, independent from the map
@@ -234,6 +233,7 @@ typedef struct s_pipe_thread_data
 	ssize_t			write_size;
 	int				pipe_fd[2];
 	pthread_mutex_t	data_mutex;
+	int				is_mutex_initialized;
 }	t_pipe_thread_data;
 //
 /*
@@ -434,5 +434,6 @@ void	kill_python_process(pid_t *python_pid);
 void	*pipe_writer(void *arg);
 int		pipe_data_multithreaded(t_win_data *window);
 void	assign_values_to_data_struct(t_win_data *data, int i);
+int		free_threads(t_win_data *window, const char *err_str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 13:51:31 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/10/20 12:01:09 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/10/21 10:24:55 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,16 @@ int	main(int argc, char *argv[])
 	free_map(data.map);
 	if (initialize_mlx_image(&data) == EXIT_FAILURE)
 		return (kill_python_process(&data.python_pid),
+			free_threads(&data, "init mlx"),
 			ft_shutdown_error(data.mlx));
 	mlx_resize_hook(data.mlx, ft_resize, &data);
 	mlx_scroll_hook(data.mlx, ft_scroll, &data);
 	mlx_loop_hook(data.mlx, ft_render, &data);
 	mlx_loop(data.mlx);
+	kill_python_process(&data.python_pid);
+	free_threads(&data, NULL);
 	free_map_coordinates(&data.coord);
 	free_manual(&data.manual);
-	pthread_mutex_destroy(&data.map_sz.data_mutex);
 	mlx_terminate(data.mlx);
-	kill_python_process(&data.python_pid);
 	return (EXIT_SUCCESS);
 }

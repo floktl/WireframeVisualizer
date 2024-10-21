@@ -49,6 +49,8 @@ class DataPlotter:
 			fcntl.fcntl(fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
 	def update_rotation_plot(self, x_rot, y_rot, z_rot):
+		if not (0 <= x_rot <= 360 and 0 <= y_rot <= 360 and 0 <= z_rot <= 360):
+			return
 		"""Update rotation data plot (Pipe 1)"""
 		with self.plot_locks[0]:
 			self.rotation_data['x'].append(x_rot)

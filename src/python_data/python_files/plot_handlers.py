@@ -12,16 +12,19 @@ class PlotHandlers:
 		ax.grid(color='gray', linestyle='--', linewidth=0.5)
 
 	@staticmethod
-	def update_rotation_plot(ax, rotation_data):
-		"""Update rotation data plot (Pipe 1)"""
+	def update_rotation_plot(ax, rotation_data, time_window=2, sampling_rate=0.01):
+		"""Update rotation data plot (Pipe 1) to show live plot of the last 2 seconds"""
 		ax.clear()
 
-		# Plot data
-		for key, color in zip(['x', 'y', 'z'], ['r', 'g', 'b']):
-			ax.plot(rotation_data[key], label=f'{key.upper()} Rotation', color=color)
+		max_points = int(time_window / sampling_rate)
 
-		ax.set_title('Rotation Data')
-		ax.set_xlabel('Time')
+		for key, color in zip(['x', 'y', 'z'], ['r', 'g', 'b']):
+			data_to_plot = rotation_data[key][-max_points:]
+			ax.plot(data_to_plot, label=f'{key.upper()} Rotation', color=color)
+
+		# Update plot titles, labels, and legend
+		ax.set_title('Rotation Data (Last 2 Seconds)')
+		ax.set_xlabel('Time (s)')
 		ax.set_ylabel('Degrees')
 		ax.legend()
 		ax.grid(True)
